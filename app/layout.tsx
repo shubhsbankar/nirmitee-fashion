@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Assistant } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from 'react-toastify';
+import GlobalProvider from '@/components/application/GlobalProvider';
 
 const assistantFont = Assistant({
   weight: ['400','500','600','700','800'],
@@ -23,7 +25,10 @@ export default function RootLayout({
       <body
         className={`${assistantFont.className } antialiased`}
       >
+        <GlobalProvider>
+        <ToastContainer />
         {children}
+        </GlobalProvider>
       </body>
     </html>
   );

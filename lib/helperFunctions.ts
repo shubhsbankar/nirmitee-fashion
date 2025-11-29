@@ -34,6 +34,9 @@ export const catchError = (error, customMessage) => {
 };*/
 
 import { NextResponse } from "next/server";
+import { SignJWT } from 'jose';
+import { sendMail } from '@/lib/sendMail'
+import { emailVerificationLink }  from '@/email/emailVerification'
 
 export function response(success: boolean, statusCode: number, message: string, data: any = {}) {
   return NextResponse.json({
@@ -68,3 +71,21 @@ export const catchError = (error: any, customMessage?: string) => {
   return response(false, statusCode, errorPayload.message, process.env.NODE_ENV === "development" ? { error: errorPayload.error } : {});
 };
 
+export const sendEmailVerificationLink = async (id,email) => {
+        console.log("*********Sending Email Verication Link**********");
+        const secret = new TextEncoder().encode(process.env.SECRET_KEY);
+
+        const token = await new  SignJWT ( {userId: id.toString()} )
+                            .setIssuedAt()
+                            .setExpirationTime('1h')
+                            .setProtectedHeader({alg: 'HS256'})
+                            .sign(secret);
+
+        await sendMail('Email verification request from Nirmitee Fashion',email,
+                       emailVerificationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email/${token}`));
+}
+
+export const generateOtp = () => {
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  return otp;
+}

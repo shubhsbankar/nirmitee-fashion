@@ -83,8 +83,32 @@ export const signupSchema = z
     }
   });
 
+export const otpStringSchema = z
+  .string()
+  .regex(/^\d{6}$/, { message: "OTP must be exactly 6 digits." });
+
+export const OTPSchema = z.object({
+   email: emailSchema,
+   otp: otpStringSchema
+});
+
+export const resetPasswordSchema = z
+      .object({
+        email: emailSchema,
+        password: passwordSchema,
+        confirmPassword: z.string()
+      }).superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["confirmPassword"],
+        message: "Passwords do not match.",
+      });
+    }
+  });
+
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;
 export type PasswordInput = z.infer<typeof passwordSchema>;
-
+export type Otp = z.infer<typeof OTPSchema>;
