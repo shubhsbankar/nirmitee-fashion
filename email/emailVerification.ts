@@ -127,7 +127,7 @@ export const emailVerificationLink = (link) => {
                                                                     style="line-height:10px">
                                                                     <div style="max-width: 250px;"><img
                                                                             alt="logo" height="auto"
-                                                                            src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764340219/NFLogo_cjieu8.png"
+                                                                            src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517349/NFLogo_buleyv.webp"
                                                                             style="display: block; height: auto; border: 0; width: 100%;"
                                                                             title="reset-password" width="250" /></div>
                                                                 </div>
