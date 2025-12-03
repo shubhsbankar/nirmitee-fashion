@@ -107,6 +107,11 @@ export const resetPasswordSchema = z
     }
   });
 
+  export const mediaEditSchema = z.object({
+    _id: z.string().min(3, '_id is required'),
+    alt: z.string().min(3, 'alt is required'),
+    title: z.string().min(3, '_title is required'),
+  });
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;

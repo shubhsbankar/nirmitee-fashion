@@ -76,7 +76,7 @@ const mediaSchema = new Schema<IMedia>(
 // NOTE: check mongoose.models to avoid OverwriteModelError in dev/hot-reload
 const MediaModel: Model<IMedia> =
   (mongoose.models && (mongoose.models as any).Media) ||
-  mongoose.model<IMedia>("Media", mediaSchema);
+  mongoose.model<IMedia>("Media", mediaSchema,'medias');
 
 export default MediaModel;
 

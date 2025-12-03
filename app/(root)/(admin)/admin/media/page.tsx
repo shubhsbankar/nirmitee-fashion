@@ -91,8 +91,8 @@ const MediaPage = () =>{
 
       useEffect(() => {
           if (selectAll){
-              const ids = data.pages.flatMap(page => 
-                                             page.data.mediaData.map(media => media._id));
+              const ids = data.pages?.flatMap(page => 
+                                             page.data?.mediaData?.map(media => media._id));
               setSelectedMedia(ids);
           }else{
               setSelectedMedia([]);
@@ -175,8 +175,8 @@ const MediaPage = () =>{
                                 </div>
                             :
                             <>
-                                {data.pages.flatMap(page => 
-                                             page.data.mediaData.map(media => media._id)).length === 0 
+                                {data.pages?.flatMap(page => 
+                                             page.data?.mediaData?.map(media => media._id)).length === 0 
                                 && <div>Data not found.</div>
                                 }
                                 <div className='grid lg:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-2 mb-5'>
