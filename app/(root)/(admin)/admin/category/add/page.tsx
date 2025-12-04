@@ -1,4 +1,5 @@
-
+'use client'
+import {  useState, useEffect } from 'react';
 import { ADMIN_DASHBOARD, ADMIN_CATEGORY_SHOW } from '@/routes/AdminPanelRoute';
 import BreadCrumb  from '@/components/application/admin/BreadCrumb';
 import {
@@ -10,9 +11,14 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
-import { loginSchema, LoginInput } from '@/lib/zodSchema'
+import { categorySchema } from '@/lib/zodSchema'
 import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
+import ButtonLoading from '@/components/application/ButtonLoading';
+import { showToast } from '@/lib/showToast';
+import axios from 'axios';
+import { zodResolver } from "@hookform/resolvers/zod";
+import slugify from 'slugify';
 
 const breadcrumbData = [
    {
@@ -30,14 +36,44 @@ const breadcrumbData = [
 ];
 
 const AddCategory = () =>{
-   const form = useForm<LoginInput>({
-    resolver: zodResolver(formSchema),
+  const [ loading, setLoading] = useState<boolean>(false);
+
+  const form = useForm({
+        resolver: zodResolver(categorySchema),
     defaultValues: {
-      email : "",
-      password : ""
+       name: "",
+       slug : "",
     },
   });
 
+  useEffect(() => {
+     const name = form.getValues('name');
+     if(name) {
+        form.setValue('slug', slugify(name).toLowerCase())
+     }
+  }, [form.watch('name')]);
+
+
+  const onSubmit = async (values) => {
+    console.log(values);
+    setLoading(true);
+	try {
+		const {data : response } = await axios.post('/api/category/create',values);
+		if ( !response.success ){
+			throw new Error(response.message);
+		}
+		console.log(response.message)
+        showToast('success',response.message);
+        form.reset();
+	}
+	catch (error) {
+		console.log(error.message)
+        showToast('error',error.message);
+	}
+	finally{
+		setLoading(false);
+        }
+  }
 
     return (
         <div>
@@ -52,12 +88,12 @@ const AddCategory = () =>{
              <div className='mb-5'>
 				  <FormField
 					control={form.control}
-					name="alt"
+					name="name"
 					render={({ field }) => (
 					  <FormItem>
-						<FormLabel>Alt</FormLabel>
+						<FormLabel>Name</FormLabel>
 						<FormControl>
-						  <Input type="text" placeholder="Enter alt" {...field} />
+						  <Input type="text" placeholder="Enter category name" {...field} />
 						</FormControl>
 						<FormMessage />
 					  </FormItem>
@@ -67,12 +103,12 @@ const AddCategory = () =>{
              <div className='mb-5'>
 				  <FormField
 					control={form.control}
-					name="title"
+					name="slug"
 					render={({ field }) => (
 					  <FormItem>
-						<FormLabel>Title</FormLabel>
+						<FormLabel>Slug</FormLabel>
 						<FormControl>
-						  <Input type="text" placeholder="Enter title" {...field} />
+						  <Input type="text" placeholder="Enter category slug" {...field} />
 						</FormControl>
 						<FormMessage />
 					  </FormItem>
@@ -81,7 +117,7 @@ const AddCategory = () =>{
             </div>
               
                <div className='mb-3'>
-                 <ButtonLoading type="submit" text="Update Media" loading={loading} className={" cursor-pointer"}/>
+                 <ButtonLoading type="submit" text="Add Category" loading={loading} className={" cursor-pointer"}/>
                </div>
 			</form>
 			</Form>

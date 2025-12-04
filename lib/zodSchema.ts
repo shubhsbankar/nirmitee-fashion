@@ -112,6 +112,12 @@ export const resetPasswordSchema = z
     alt: z.string().min(3, 'alt is required'),
     title: z.string().min(3, '_title is required'),
   });
+
+  export const categorySchema = z.object({
+    _id: z.string().min(3, '_id is optional').optional(),
+    name: nameSchema,
+    slug: z.string().min(3, '_slug is required'),
+  });
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;

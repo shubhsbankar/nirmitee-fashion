@@ -1,9 +1,7 @@
 'use client'
-import { use, useState, useEffect } from 'react';
-import useFetch from '@/hooks/useFetch';
-import { ADMIN_DASHBOARD, ADMIN_MEDIA_SHOW } from '@/routes/AdminPanelRoute';
+import {  use, useState, useEffect } from 'react';
+import { ADMIN_DASHBOARD, ADMIN_CATEGORY_SHOW } from '@/routes/AdminPanelRoute';
 import BreadCrumb  from '@/components/application/admin/BreadCrumb';
-import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -11,16 +9,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import ButtonLoading from '@/components/application/ButtonLoading';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { mediaEditSchema } from '@/lib/zodSchema';
+} from "@/components/ui/form"
 import { useForm } from "react-hook-form"
+import { categorySchema } from '@/lib/zodSchema'
+import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
-import Image from 'next/image';
-import imgPlaceholder from '@/public/assets/images/img-placeholder.webp';
+import ButtonLoading from '@/components/application/ButtonLoading';
 import { showToast } from '@/lib/showToast';
 import axios from 'axios';
+import { zodResolver } from "@hookform/resolvers/zod";
+import slugify from 'slugify';
+import useFetch from '@/hooks/useFetch';
 
 const breadcrumbData = [
    {
@@ -28,44 +27,51 @@ const breadcrumbData = [
       label: 'Home'
    },
    {
-      href: ADMIN_MEDIA_SHOW,
-      label: 'Media'
+      href: ADMIN_CATEGORY_SHOW,
+      label: 'Category'
    },
    {
       href: '',
-      label: 'Edit Media'
+      label: 'Edit Category'
    },
 ];
 
-const EditMedia = ( {params}) =>{
+const EditCategory = ({params}) =>{
+    const { id } = use(params);
   const [ loading, setLoading] = useState<boolean>(false);
-   const { id } = use(params);
-   const {data : mediaData,error} = useFetch(`/api/media/get/${id}`);
-     
+    const { data: categoryData } = useFetch(`/api/category/get/${id}`);
+
   const form = useForm({
-        resolver: zodResolver(mediaEditSchema),
+        resolver: zodResolver(categorySchema),
     defaultValues: {
-       _id: "",
-      alt : "",
-      title:  ""
+       _id: id,
+       name: "",
+       slug : "",
     },
   });
-
   useEffect(()=>{
-     if (mediaData && mediaData.success) {
+     if (categoryData && categoryData.success){
+        const data = categoryData.data;
         form.reset({
-           _id: mediaData.data._id,
-           alt: mediaData.data.alt,
-           title: mediaData.data.title
-        })
+           name: data?.name,
+           slug: data?.slug,
+           _id: id
+        });
      }
-  },[mediaData]);
+  },[categoryData]);
+  useEffect(() => {
+     const name = form.getValues('name');
+     if(name) {
+        form.setValue('slug', slugify(name).toLowerCase())
+     }
+  }, [form.watch('name')]);
+
 
   const onSubmit = async (values) => {
     console.log(values);
     setLoading(true);
 	try {
-		const {data : response } = await axios.put('/api/media/update',values);
+       const {data : response } = await axios.put('/api/category/update',values);
 		if ( !response.success ){
 			throw new Error(response.message);
 		}
@@ -81,29 +87,25 @@ const EditMedia = ( {params}) =>{
         }
   }
 
-   return (
+    return (
         <div>
-        <BreadCrumb breadcrumbData={breadcrumbData}/>
+           <BreadCrumb breadcrumbData={breadcrumbData} />
          <Card className='py-0 rounded shadow-sm'>
                 <CardHeader className='pt-3 px-3 border-b [.border-b]:pb-2'>
-                 <h4 className='font-semibold text-xl'>Edit Media</h4>        
+                 <h4 className='font-semibold text-xl'>Edit Category</h4>        
                 </CardHeader>
                 <CardContent className='pb-5'>
                    <Form {...form}>
 			 <form onSubmit={form.handleSubmit(onSubmit)} >
-                <div className='mb-5'>
-                   <Image src={mediaData?.data?.secure_url || imgPlaceholder} width={150} height={150}
-                   alt={mediaData?.data?.alt || 'Image'}/>
-                </div>
              <div className='mb-5'>
 				  <FormField
 					control={form.control}
-					name="alt"
+					name="name"
 					render={({ field }) => (
 					  <FormItem>
-						<FormLabel>Alt</FormLabel>
+						<FormLabel>Name</FormLabel>
 						<FormControl>
-						  <Input type="text" placeholder="Enter alt" {...field} />
+						  <Input type="text" placeholder="Enter category name" {...field} />
 						</FormControl>
 						<FormMessage />
 					  </FormItem>
@@ -113,12 +115,12 @@ const EditMedia = ( {params}) =>{
              <div className='mb-5'>
 				  <FormField
 					control={form.control}
-					name="title"
+					name="slug"
 					render={({ field }) => (
 					  <FormItem>
-						<FormLabel>Title</FormLabel>
+						<FormLabel>Slug</FormLabel>
 						<FormControl>
-						  <Input type="text" placeholder="Enter title" {...field} />
+						  <Input type="text" placeholder="Enter category slug" {...field} />
 						</FormControl>
 						<FormMessage />
 					  </FormItem>
@@ -127,16 +129,16 @@ const EditMedia = ( {params}) =>{
             </div>
               
                <div className='mb-3'>
-                 <ButtonLoading type="submit" text="Update Media" loading={loading} className={" cursor-pointer"}/>
+                 <ButtonLoading type="submit" text="Update Category" loading={loading} className={" cursor-pointer"}/>
                </div>
 			</form>
 			</Form>
 
                 </CardContent>
             </Card>
-
-       </div>
+        </div>
     );
 };
 
-export default EditMedia;
+
+export default EditCategory;
