@@ -118,6 +118,29 @@ export const resetPasswordSchema = z
     name: nameSchema,
     slug: z.string().min(3, '_slug is required'),
   });
+
+  export const productSchema = z.object({
+    _id: z.string().min(3, '_id is optional').optional(),
+    name: nameSchema,
+    slug: z.string().min(3, '_slug is required'),
+    category: z.string().min(3,'Category is required'),
+    mrp: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    sellingPrice: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    discountPercentage: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    description: z.string().min(3,'description is required')
+  });
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;

@@ -72,6 +72,7 @@ export async function GET(request) {
 
 
         return NextResponse.json({
+            success:true,
             data: getCategory,
             meta: { totalRowCount }
         });
