@@ -22,6 +22,7 @@ import slugify from 'slugify';
 import useFetch from '@/hooks/useFetch';
 import Select from '@/components/application/select';
 import Editor from '@/components/application/admin/Editor';
+import MediaModal from '@/components/application/admin/MediaModal';
 
 const breadcrumbData = [
    {
@@ -43,6 +44,10 @@ const AddProduct = () =>{
   const [ categoryOption, setCategoryOption] = useState([]);
   const {data : getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
   console.log(getCategory);
+
+  const [open, setOpen] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState([]);
+
   useEffect(() => {
      if (getCategory && getCategory.success){
         const data = getCategory.data;
@@ -214,6 +219,15 @@ const AddProduct = () =>{
 						<FormMessage />
                </div>
                </div>
+                <div className='md:col-span-2 border border rounded p-5 text-center'>
+                <MediaModal open={open} setOpen={setOpen} selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia}
+                isMultiple={true} />
+                <div onClick={() => {setOpen(true)}} className='bg-gray-50 dark:bg-card border w-[200px] mx-auto
+                  p-5 cursor-pointer'>
+                  <span className='semi-bold'>Select Media</span>
+                </div>
+              </div>
+               
                <div className=''>
                  <ButtonLoading type="submit" text="Add Product" loading={loading} className={" cursor-pointer"}/>
                </div>
