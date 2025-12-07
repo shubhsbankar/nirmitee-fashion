@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
-import { categorySchema } from '@/lib/zodSchema'
+import { productSchema } from '@/lib/zodSchema'
 import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
 import ButtonLoading from '@/components/application/ButtonLoading';
@@ -23,6 +23,7 @@ import useFetch from '@/hooks/useFetch';
 import Select from '@/components/application/select';
 import Editor from '@/components/application/admin/Editor';
 import MediaModal from '@/components/application/admin/MediaModal';
+import Image from 'next/image';
 
 const breadcrumbData = [
    {
@@ -42,11 +43,12 @@ const breadcrumbData = [
 const AddProduct = () =>{
   const [ loading, setLoading] = useState<boolean>(false);
   const [ categoryOption, setCategoryOption] = useState([]);
+  const [editorInstance, setEditorInstance] = useState(null);
   const {data : getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
   console.log(getCategory);
 
   const [open, setOpen] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState([]);
+  const [selectedMedia, setSelectedMedia] = useState<Array<{id: string; url: string}>>([]);
 
   useEffect(() => {
      if (getCategory && getCategory.success){
@@ -56,14 +58,14 @@ const AddProduct = () =>{
      }
   },[getCategory]); 
   const form = useForm({
-        resolver: zodResolver(categorySchema),
+        resolver: zodResolver(productSchema),
     defaultValues: {
        name: "",
        slug : "",
        category:"",
-       mrp:"",
-       sellingPrice: "",
-       discountPercentage: "",
+       mrp:0,
+       sellingPrice: 0,
+       discountPercentage: 0,
        description: "",
     },
   });
@@ -75,18 +77,33 @@ const AddProduct = () =>{
      }
   }, [form.watch('name')]);
 
-
+  useEffect(() => {
+    const mrp = Number(form.getValues("mrp")) || 0;
+    const sellingPrice = Number(form.getValues("sellingPrice")) || 0;
+    
+    if (mrp > 0 && sellingPrice > 0) {
+      const val = ((mrp - sellingPrice) / mrp) * 100;
+      form.setValue("discountPercentage", Math.round(val));
+    }
+    
+    
+ }, [form.watch('mrp'),form.watch('sellingPrice')]);
 
   const editor = (event, editor) => {
   const data = editor.getData();
-  form.setValue('description',data);
-      
+  form.setValue('description',data); 
   }
 
   const onSubmit = async (values) => {
     console.log(values);
     setLoading(true);
 	try {
+    if (selectedMedia.length <= 0 )
+    {
+      return showToast('error','Please select media.');
+    }
+    values.media = selectedMedia.map(m => m.id);
+
 		const {data : response } = await axios.post('/api/product/create',values);
 		if ( !response.success ){
 			throw new Error(response.message);
@@ -94,6 +111,9 @@ const AddProduct = () =>{
 		console.log(response.message)
         showToast('success',response.message);
         form.reset();
+        setSelectedMedia([]);
+        console.log(editorInstance)
+        editorInstance?.setData('');
 	}
 	catch (error) {
 		console.log(error.message)
@@ -206,7 +226,7 @@ const AddProduct = () =>{
 					  <FormItem>
 						<FormLabel>Discount Percentage<span className='text-red-500'>*</span></FormLabel>
 						<FormControl>
-						  <Input type="number" placeholder="Enter Discount Percentage" {...field} />
+						  <Input type="number" readOnly placeholder="Enter Discount Percentage" {...field} />
 						</FormControl>
 						<FormMessage />
 					  </FormItem>
@@ -215,20 +235,38 @@ const AddProduct = () =>{
                </div>
             <div className='mb-5 md:col-span-2'>
                <FormLabel className='mb-2'>Description<span className='text-red-500'>*</span></FormLabel>
-                        <Editor onChange={editor} />
+                        <Editor onChange={editor} onReddy={setEditorInstance}/>
 						<FormMessage />
                </div>
                </div>
                 <div className='md:col-span-2 border border rounded p-5 text-center'>
                 <MediaModal open={open} setOpen={setOpen} selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia}
                 isMultiple={true} />
+                {
+                  selectedMedia.length > 0 &&
+                    <div className='flex justify-center items-center flex-wrap mb-3 gap-2'>
+                    {
+                      selectedMedia.map(m => (
+                        <div key={m.id} className='h-24 w-24 border'>
+                          <Image 
+                            src={m.url}
+                            height={100}
+                            width={100}
+                            alt={m.alt || ''}
+                            className='size-full object-cover'
+                          />
+                        </div>
+                      ))
+                    }
+                    </div>
+                }
                 <div onClick={() => {setOpen(true)}} className='bg-gray-50 dark:bg-card border w-[200px] mx-auto
                   p-5 cursor-pointer'>
                   <span className='semi-bold'>Select Media</span>
                 </div>
               </div>
                
-               <div className=''>
+               <div className='mt-5'>
                  <ButtonLoading type="submit" text="Add Product" loading={loading} className={" cursor-pointer"}/>
                </div>
 			</form>

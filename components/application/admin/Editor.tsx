@@ -88,7 +88,7 @@ import { decode } from 'entities';
  */
 const LICENSE_KEY = 'GPL'; // or <YOUR_LICENSE_KEY>.
 
-export default function Editor({ onChange, initialData }) {
+export default function Editor({ onChange, initialData, onReddy }) {
     const editorContainerRef = useRef(null);
     const editorRef = useRef(null);
     const [isLayoutReady, setIsLayoutReady] = useState(false);
@@ -386,7 +386,7 @@ export default function Editor({ onChange, initialData }) {
     return (
         <div  >
             <div ref={editorContainerRef}>
-                <div ref={editorRef}>{editorConfig && <CKEditor editor={ClassicEditor} config={editorConfig} onChange={onChange} />}</div>
+                <div ref={editorRef}>{editorConfig && <CKEditor editor={ClassicEditor} config={editorConfig} onChange={onChange} onReady={onReddy} />}</div>
             </div>
         </div>
     );

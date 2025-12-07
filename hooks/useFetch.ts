@@ -36,6 +36,8 @@ const useFetch = (url, method = 'GET', options = {}) =>{
     }
     catch(error) {
       setError(error.message);
+    }finally {
+      setLoading(false);
     }
   }
   apiCall();

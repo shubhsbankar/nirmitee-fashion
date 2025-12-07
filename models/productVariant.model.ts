@@ -2,15 +2,17 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 /**
- * Iproduct - TypeScript interface for a product document
+ * Iproductvariant - TypeScript interface for a productvariant document
  */
-export interface Iproduct extends Document {
+export interface Iproductvariant extends Document {
  _id?: Types.ObjectId;
 
-  name: string;
-  slug: string;
+  color: string;
+  sku: string;
+  size: string;
+  stock: number,
 
-  category: Types.ObjectId; // ref: Category
+  product: Types.ObjectId; // ref: Category
 
   mrp: number;
   sellingPrice: number;
@@ -18,7 +20,6 @@ export interface Iproduct extends Document {
 
   media: Types.ObjectId[]; // ref: Media
 
-  description?: string;
 
   deletedAt?: Date | null;
 
@@ -29,24 +30,22 @@ export interface Iproduct extends Document {
 /**
  * Schema definition
  */
-const productSchema = new Schema<Iproduct>(
+const productvariantSchema = new Schema<Iproductvariant>(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
-      lowercase: true
-    },
-    category: {
+    product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      ref: 'Product',
       required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    size: {
+      type: String,
+      required: true,
+      trim: true,
     },
     mrp: {
       type: Number,
@@ -60,15 +59,20 @@ const productSchema = new Schema<Iproduct>(
       type: Number,
       required: true,
     },
-    media: {
+    sku: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    stock:{
+      type: Number,
+      required: true
+    },
+    media: [{
        type: mongoose.Schema.Types.ObjectId,
        ref: 'Media',
        required: true
-    },
-    description: {
-      type: String,
-       required: true
-    },
+    }],
     deletedAt: {
       type: Date,
       default: null,
@@ -80,15 +84,13 @@ const productSchema = new Schema<Iproduct>(
   }
 );
 
-productSchema.index({ category :1});
-
 /**
  * Prevent OverwriteModelError in environments with hot-reload (Next.js dev)
- * Export a Model<Iproduct> default.
+ * Export a Model<Iproductvariant> default.
  */
-const ProductModel: Model<Iproduct> = (mongoose.models && (mongoose.models as any).Product)
-  ? (mongoose.models as any).Product
-  : mongoose.model<Iproduct>("product", productSchema, "products");
+const ProductVariantModel: Model<Iproductvariant> = (mongoose.models && (mongoose.models as any).ProductVariant)
+  ? (mongoose.models as any).ProductVariant
+  : mongoose.model<Iproductvariant>("ProductVariant", productvariantSchema, "productvariants");
 
-export default ProductModel;
+export default ProductVariantModel;
 

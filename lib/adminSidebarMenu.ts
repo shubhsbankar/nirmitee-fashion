@@ -12,7 +12,13 @@ import {
   ADMIN_CATEGORY_ADD, 
   ADMIN_CATEGORY_SHOW,
   ADMIN_PRODUCT_ADD,
-  ADMIN_PRODUCT_SHOW
+  ADMIN_PRODUCT_SHOW,
+  ADMIN_PRODUCT_VARIANT_ADD,
+  ADMIN_PRODUCT_VARIANT_SHOW,
+  ADMIN_COUPON_ADD,
+  ADMIN_COUPON_SHOW,
+  ADMIN_CUSTOMERS_SHOW,
+  ADMIN_REVIEW_SHOW
 } from '@/routes/AdminPanelRoute';
 
 export const adminAppSidebarMenu = [
@@ -47,7 +53,7 @@ export const adminAppSidebarMenu = [
       },
       {
         title: "Add Variant",
-        url: '#'
+        url: ADMIN_PRODUCT_VARIANT_ADD
       },
       {
         title: "All Products",
@@ -55,7 +61,7 @@ export const adminAppSidebarMenu = [
       },
       {
         title: "Product Variant",
-        url: '#'
+        url: ADMIN_PRODUCT_VARIANT_SHOW
       }
 
     ]
@@ -67,11 +73,11 @@ export const adminAppSidebarMenu = [
     subMenu: [
       {
         title: "Add Coupon",
-        url: '#'
+        url: ADMIN_COUPON_ADD
       },
       {
         title: "All Coupons",
-        url: '#'
+        url: ADMIN_COUPON_SHOW
       }
     ]
   },
@@ -82,12 +88,12 @@ export const adminAppSidebarMenu = [
   },
   {
     title : "Customers",
-    url: '#',
+    url: ADMIN_CUSTOMERS_SHOW,
     icon: LuUserRound,
   },
   {
     title : "Ratings & Review",
-    url: '#',
+    url: ADMIN_REVIEW_SHOW,
     icon: IoMdStarOutline,
   },
   {

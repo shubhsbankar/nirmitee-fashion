@@ -64,6 +64,7 @@ const Datatable = ({
             throw Error(response.message);
           }
           const rowData = response.data;
+          console.log('rowData',rowData);
           csv = generateCsv(csvConfig)(rowData);
         }
         download(csvConfig)(csv);

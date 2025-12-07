@@ -59,7 +59,7 @@ export const nameSchema = z
   .string()
   .min(2, "Name must be at least 2 characters")
   .max(50, "Name cannot exceed 50 characters")
-  .regex(/^[A-Za-z ]+$/, "Name can contain only alphabets and spaces");
+  // .regex(/^[A-Za-z ]+$/, "Name can contain only alphabets and spaces");
 
 
 /**
@@ -139,8 +139,57 @@ export const resetPasswordSchema = z
       z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
                                                       "Please enter valid number")
     ]),
-    description: z.string().min(3,'description is required')
+    description: z.string().min(3,'description is required'),
+    media: z.array(z.string()).optional()
   });
+
+  export const productVariantSchema = z.object({
+    _id: z.string().min(3, '_id is optional').optional(),
+    product: z.string().min(3, 'product is required'),
+    stock: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    sku:z.string().min(3,'color is required'),
+    color: z.string().min(3,'color is required'),
+    size: z.string().min(1,'size is required'),
+    mrp: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    sellingPrice: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    discountPercentage: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    media: z.array(z.string()).optional()
+  });
+
+  export const couponSchema = z.object({
+    _id: z.string().min(3, '_id is optional').optional(),
+    discountPercentage: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+    code: z.string().min(3, '_id is optional'),
+    validity:z.coerce.date(),
+    minShoppingAmount: z.union([
+      z.number().positive('Expected positive value. Received negative'),
+      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
+                                                      "Please enter valid number")
+    ]),
+  });
+
+
+
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;
