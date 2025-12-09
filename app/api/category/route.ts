@@ -34,6 +34,7 @@ export async function GET(request) {
              matchQuery['$or']= [
                  {name: { $regex: globalFilter, $options: 'i'}},
                  {slug: { $regex: globalFilter, $options: 'i'}},
+                 {parent: { $regex: globalFilter, $options: 'i'}},
              ]
          }
 
@@ -56,6 +57,8 @@ export async function GET(request) {
                      _id: 1,
                      name: 1,
                      slug: 1,
+                     isSubcategory: 1,
+                     parent: 1,
                      createdAt: 1,
                      updatedAt: 1,
                      deletedAt: 1

@@ -117,6 +117,8 @@ export const resetPasswordSchema = z
     _id: z.string().min(3, '_id is optional').optional(),
     name: nameSchema,
     slug: z.string().min(3, '_slug is required'),
+    isSubcategory: z.boolean(),
+    parent:z.string().min(3, '_slug is required').optional(),
   });
 
   export const productSchema = z.object({

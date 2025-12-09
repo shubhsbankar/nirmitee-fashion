@@ -47,6 +47,8 @@ const EditCategory = ({params}) =>{
        _id: id,
        name: "",
        slug : "",
+       parent: '',
+       isSubcategory: false
     },
   });
   useEffect(()=>{
