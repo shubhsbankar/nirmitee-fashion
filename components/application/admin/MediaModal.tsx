@@ -97,7 +97,7 @@ const MediaModal = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
-        className="sm:max-w-[80%] h-[90vh] p-0 bg-white border shadow-lg flex flex-col overflow-hidden"
+        className="sm:max-w-[80%] h-[90vh] p-0 bg-white dark:bg-card border shadow-lg flex flex-col overflow-hidden"
         showCloseButton={true}
       >
         <DialogDescription className="hidden"></DialogDescription>
