@@ -18,11 +18,12 @@ export async function POST(request) {
          if(!validate.success) {
              return response(false, 400, 'Invalid or missing field',validate.error);
          }
-         const {name, slug} = validate.data;
+         const {name, slug, isSubcategory, parent} = validate.data;
+         console.log('validate.data',validate.data);
          const newCategory  = new CategoryModel({
-           name, slug
+           name, slug, isSubcategory, parent
          });
-         newCategory.save();
+         await newCategory.save();
         return response(true,200,"Category added successful");
 
     }

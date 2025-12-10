@@ -30,11 +30,16 @@ export async function GET(request, { params }) {
          };
          const data = await CategoryModel
                                  .findOne(filter)
+                                 //.populate('parent','name')
                                  .lean();
          if (!data){
              return response(false, 404, 'Category not found.');
          }
- 
+
+        //  const newData = {
+        //     ...data,
+        //     parent : data?.parent?.name || null
+        //  }
 
         return response(true,200,"Category found.",data);
 

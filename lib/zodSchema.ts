@@ -113,11 +113,27 @@ export const resetPasswordSchema = z
     title: z.string().min(3, '_title is required'),
   });
 
-  export const categorySchema = z.object({
-    _id: z.string().min(3, '_id is optional').optional(),
+export const categorySchema = z
+  .object({
+    _id: z.string().optional(),         // no min validation needed
     name: nameSchema,
-    slug: z.string().min(3, '_slug is required'),
-  });
+    slug: z.string().min(3, "Slug is required"),
+    isSubcategory: z.boolean(),
+    parent: z.string().optional().transform(val => (val === "" ? undefined : val)),      // will be conditionally validated
+  })
+  .refine(
+    (data) => {
+      // If isSubcategory === true, parent must exist and have length >= 3
+      if (data.isSubcategory) {
+        return !!data.parent && data.parent.length >= 3;
+      }
+      return true; // No parent needed when not a subcategory
+    },
+    {
+      message: "Parent category is required when adding a subcategory",
+      path: ["parent"],
+    }
+  );
 
   export const productSchema = z.object({
     _id: z.string().min(3, '_id is optional').optional(),

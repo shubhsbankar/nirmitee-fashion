@@ -19,6 +19,9 @@ import { showToast } from '@/lib/showToast';
 import axios from 'axios';
 import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from 'slugify';
+import { Checkbox } from '@/components/ui/checkbox';
+import Select from '@/components/application/select';
+import useFetch from '@/hooks/useFetch';
 
 const breadcrumbData = [
    {
@@ -35,8 +38,12 @@ const breadcrumbData = [
    },
 ];
 
-const AddCategory = () =>{
-  const [ loading, setLoading] = useState<boolean>(false);
+const AddCategory = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isSubCategory, setIsSubCategory] = useState<boolean>(false);
+  const [parentOption, setParentOption] = useState([]);
+  const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
+  console.log(getCategory);
 
   const form = useForm({
         resolver: zodResolver(categorySchema),
@@ -45,6 +52,24 @@ const AddCategory = () =>{
        slug : "",
     },
   });
+
+  useEffect(() =>{
+    console.log('isSubCategory',isSubCategory);
+    form.setValue('isSubcategory',isSubCategory);
+  },[isSubCategory]);
+
+    useEffect(() => {
+    if (getCategory && getCategory.success) {
+      const data = getCategory.data;
+const options = data
+  .filter(cat => !cat.isSubcategory)
+  .map(cat => ({ label: cat.name, value: String(cat._id) }));
+
+        console.log("options123",options);
+        setParentOption(options);
+      
+    }
+  }, [getCategory]);
 
   useEffect(() => {
      const name = form.getValues('name');
@@ -57,22 +82,23 @@ const AddCategory = () =>{
   const onSubmit = async (values) => {
     console.log(values);
     setLoading(true);
-	try {
-		const {data : response } = await axios.post('/api/category/create',values);
-		if ( !response.success ){
-			throw new Error(response.message);
-		}
-		console.log(response.message)
-        showToast('success',response.message);
-        form.reset();
-	}
-	catch (error) {
-		console.log(error.message)
-        showToast('error',error.message);
-	}
-	finally{
-		setLoading(false);
-        }
+    try {
+      const { data: response } = await axios.post('/api/category/create', values);
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+      console.log(response.message)
+      showToast('success', response.message);
+      form.reset();
+      setIsSubCategory(false);     
+    }
+    catch (error) {
+      console.log(error.message)
+      showToast('error', error.message);
+    }
+    finally {
+      setLoading(false);
+    }
   }
 
     return (
@@ -116,16 +142,57 @@ const AddCategory = () =>{
 				  />
             </div>
               
-               <div className='mb-3'>
-                 <ButtonLoading type="submit" text="Add Category" loading={loading} className={" cursor-pointer"}/>
-               </div>
-			</form>
-			</Form>
+     		
+              <div className='mb-5'>
+                <FormField
+                  control={form.control}
+                  name="isSubcategory"
+                  render={({ field }) => (
+                    <FormItem className='flex gap-5'>
+                      <FormLabel>{`Add As SubCategory`}</FormLabel>
+                      <FormControl>
+                        <Checkbox 
+                        checked={isSubCategory}
+                        onCheckedChange={() => setIsSubCategory(!isSubCategory)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                </CardContent>
-            </Card>
-        </div>
-    );
+              {isSubCategory && <div className='mb-5'>
+                <FormField
+                  control={form.control}
+                  name="parent"
+                  render={({ field }) => (
+                    <FormItem >
+                      <FormLabel>Parent Category</FormLabel>
+                      <FormControl>
+                        <Select
+                          options={parentOption}
+                          selected={field.value}
+                          setSelected={field.onChange}
+                          isMulti={false}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>}
+
+              <div className='mb-3'>
+                <ButtonLoading type="submit" text="Add Category" loading={loading} className={" cursor-pointer"} />
+              </div>
+            </form>
+          </Form>
+
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 

@@ -12,6 +12,19 @@ export const DT_CATEGORY_COLUMN = [
     accessorKey: "slug", //access nested data with dot notation
     header: "Slug",
   },
+   {
+    accessorKey: "isSubcategory", //access nested data with dot notation
+    header: "isSubcategory",
+    Cell: ({ renderedCellValue }) => (<Chip
+        color='default'
+        variant='outlined'
+        label={!renderedCellValue ? "Category" : "SubCategory"}
+      />)
+  },
+  {
+    accessorKey: "parent", //access nested data with dot notation
+    header: "Parent Category",
+  },
 ];
 
 export const DT_PRODUCT_COLUMN = [

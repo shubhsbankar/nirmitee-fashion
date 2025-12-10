@@ -18,7 +18,7 @@ export async function PUT(request) {
          if(!validate.success) {
              return response(false, 400, 'Invalid or missing field',validate.error);
          }
-         const {_id,name, slug} = validate.data;
+         const {_id,name, slug, isSubcategory, parent} = validate.data;
 
          const category = await CategoryModel.findOne({deletedAt: null, _id })
          if (!category){
@@ -27,6 +27,8 @@ export async function PUT(request) {
 
          category.name = name;
          category.slug = slug;
+         category.isSubcategory = isSubcategory;
+         category.parent = isSubcategory ? parent : null;
          await category.save();
         return response(true,200,"Category updated successful");
 
