@@ -34,7 +34,7 @@ export async function GET(request) {
              matchQuery['$or']= [
                  {name: { $regex: globalFilter, $options: 'i'}},
                  {slug: { $regex: globalFilter, $options: 'i'}},
-                 {parent: { $regex: globalFilter, $options: 'i'}},
+                 {'parentData.name': { $regex: globalFilter, $options: 'i'}},
              ]
          }
 
@@ -48,6 +48,14 @@ export async function GET(request) {
          });
 
          const aggregatePipeline = [
+            {
+                $lookup: {
+                    from:'categories',
+                    localField: 'parent',
+                    foreignField: '_id',
+                    as: 'parentData'
+                }
+            },
              {$match : matchQuery},
              {$sort: Object.keys(sortQuery).length ? sortQuery : {createdAt: -1}},
              {$skip: start},
@@ -58,7 +66,7 @@ export async function GET(request) {
                      name: 1,
                      slug: 1,
                      isSubcategory: 1,
-                     parent: 1,
+                     parent: '$parentData.name',
                      createdAt: 1,
                      updatedAt: 1,
                      deletedAt: 1
@@ -71,7 +79,7 @@ export async function GET(request) {
          const totalRowCount = await CategoryModel.countDocuments(matchQuery);
 
 
-         console.log('totalRowCount',totalRowCount); 
+         console.log('getCategory',getCategory); 
 
 
         return NextResponse.json({

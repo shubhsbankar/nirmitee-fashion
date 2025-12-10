@@ -40,7 +40,7 @@ const breadcrumbData = [
 
 const AddCategory = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [isSubcategory, setIsSubcategory] = useState<boolean>(false);
+  const [isSubCategory, setIsSubCategory] = useState<boolean>(false);
   const [parentOption, setParentOption] = useState([]);
   const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
   console.log(getCategory);
@@ -55,12 +55,20 @@ const AddCategory = () => {
     },
   });
 
+  useEffect(() =>{
+    form.setValue('isSubcategory',isSubCategory);
+  },[isSubCategory]);
+
     useEffect(() => {
     if (getCategory && getCategory.success) {
       const data = getCategory.data;
-      const options = data.map((cat) => {
-        if (!cat.isSubcategory) return { label: cat.name, value: cat._id }});
-      setParentOption(options);
+const options = data
+  .filter(cat => !cat.isSubcategory)
+  .map(cat => ({ label: cat.name, value: String(cat._id) }));
+
+        console.log("options123",options);
+        setParentOption(options);
+      
     }
   }, [getCategory]);
 
@@ -83,6 +91,7 @@ const AddCategory = () => {
       console.log(response.message)
       showToast('success', response.message);
       form.reset();
+      setIsSubCategory(false);     
     }
     catch (error) {
       console.log(error.message)
@@ -143,8 +152,8 @@ const AddCategory = () => {
                       <FormLabel>{`Add As SubCategory`}</FormLabel>
                       <FormControl>
                         <Checkbox 
-                        checked={isSubcategory}
-                        onCheckedChange={() => setIsSubcategory(!isSubcategory)}
+                        checked={isSubCategory}
+                        onCheckedChange={() => setIsSubCategory(!isSubCategory)}
                         />
                       </FormControl>
                       <FormMessage />
@@ -153,7 +162,7 @@ const AddCategory = () => {
                 />
               </div>
 
-              {isSubcategory && <div className='mb-5'>
+              {isSubCategory && <div className='mb-5'>
                 <FormField
                   control={form.control}
                   name="parent"

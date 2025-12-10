@@ -85,7 +85,7 @@ export interface ICategory extends Document {
   name: string;
   slug: string;
   isSubcategory: boolean;
-  parent: string;
+  parent: mongoose.Schema.Types.ObjectId;
   deletedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -110,11 +110,12 @@ const categorySchema = new Schema<ICategory>(
     },
     isSubcategory:{
       type: Boolean,
-      default: false
+      default: false,
+      required: true
     },
     parent:{
-      type: String,
-      default: null
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
     },
     deletedAt: {
       type: Date,

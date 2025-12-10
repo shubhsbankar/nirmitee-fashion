@@ -16,15 +16,26 @@ export async function GET(request) {
           deletedAt: null
          }
 
-         const category = await CategoryModel.find(filter).sort({ createdAt: -1}).lean();
-         if (!category){
+         const category = await CategoryModel.find(filter).sort({ createdAt: -1}).populate('parent','name').lean();
+         if (!category || category.length === 0){
         return response(false,404,"Collection empty.");
          }
+//console.log(category)
+        
+        const newCat = category.map((c) => {
+            if (c.parent){
+               return {
+                ...c,
+                parent: c.parent.name || null
+               }
+               
+            }
+            return c;
+        });
 
-
+         console.log(newCat)
  
-
-        return response(true,200,"Category found.",category);
+        return response(true,200,"Category found.",newCat);
 
     }
     catch (error) {
