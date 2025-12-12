@@ -15,7 +15,6 @@ import { useState } from 'react'
 
 
 
-
 const Header = () => {
   const [isMobileMenu, setIsMobileMenu] = useState(false);
     const auth = useSelector(store => store.authStore.auth);
@@ -26,11 +25,11 @@ const Header = () => {
         <Image src={logo} alt='Nirmitee Fashion Logo' width={250} height={120}  className='lg:w-32 w-24'/>
         </Link>
         <div className='flex justify-between gap-20'>
-          <nav className={`lg:relative lg:w-auto lg:top-0 lg:left-0 bg-white  fixed z-50 top-0 w-full h-screen left-0`}>
+          <nav className={`lg:relative lg:w-auto lg:top-0 lg:left-0 bg-white  fixed z-50 top-0 w-full lg:h-auto h-screen transition-all ${isMobileMenu ? 'left-0' : 'left-[-100%]'}`}>
             <div className='lg:hidden flex justify-between items-center bg-gray50 py-3 border-b px-3'>
                <Image src={logo} alt='Nirmitee Fashion Logo' width={250} height={120}  className='lg:w-32 w-24'/>
                 <button type='button'>
-                <IoMdClose size={25} className='text-gray-500 hover:text-primary'/>
+                <IoMdClose size={25} className='text-gray-500 hover:text-primary'onClick={() => setIsMobileMenu(false)}/>
               </button>
 
             </div>
@@ -76,7 +75,7 @@ const Header = () => {
 
          }
         
-              <button type='button' className='lg:hidden block'>
+              <button type='button' className='lg:hidden block' onClick={() => setIsMobileMenu(true)}>
                 <HiMiniBars3 size={25} className='text-gray-500 hover:text-primary'/>
               </button>
 
