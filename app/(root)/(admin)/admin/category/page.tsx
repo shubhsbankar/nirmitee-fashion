@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 import {  useState, useEffect, useMemo, useCallback } from 'react';
 import { ADMIN_DASHBOARD, ADMIN_CATEGORY_SHOW, ADMIN_CATEGORY_ADD, ADMIN_TRASH,
 ADMIN_CATEGORY_EDIT } from '@/routes/AdminPanelRoute';
@@ -88,3 +88,95 @@ const ShowCategory = () =>{
 
 
 export default ShowCategory;
+*/
+
+'use client'
+
+import React, { useMemo, useCallback } from 'react'
+import {
+  ADMIN_DASHBOARD,
+  ADMIN_CATEGORY_SHOW,
+  ADMIN_CATEGORY_ADD,
+  ADMIN_CATEGORY_EDIT,
+  ADMIN_TRASH,
+} from '@/routes/AdminPanelRoute'
+import BreadCrumb from '@/components/application/admin/BreadCrumb'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { FiPlus } from 'react-icons/fi'
+import Link from 'next/link'
+import DatatableWrapper from '@/components/application/admin/DatatableWrapper'
+import { columnConfig } from '@/lib/clientHelperFunctions'
+import { DT_CATEGORY_COLUMN } from '@/lib/column'
+import EditAction from '@/components/application/admin/EditAction'
+import DeleteAction from '@/components/application/admin/DeleteAction'
+
+/**
+ * Minimal types — replace `any` with your actual row & handler types if available.
+ */
+type RowType = any
+type HandleDeleteFn = (...args: any[]) => void
+
+const breadcrumbData = [
+  {
+    href: ADMIN_DASHBOARD,
+    label: 'Home',
+  },
+  {
+    href: ADMIN_CATEGORY_SHOW,
+    label: 'Category',
+  },
+]
+
+const ShowCategory: React.FC = () => {
+  const columns = useMemo(() => columnConfig(DT_CATEGORY_COLUMN), [])
+
+  /**
+   * action callback used by DatatableWrapper to render row-level actions.
+   * Keep types permissive — replace them with real types from your datatable library if available.
+   */
+  const action = useCallback(
+    (row: RowType, deleteType: string, handleDelete: HandleDeleteFn) => {
+      const actionMenu: React.ReactNode[] = []
+      actionMenu.push(<EditAction href={ADMIN_CATEGORY_EDIT(row.original._id)} key="edit" />)
+      actionMenu.push(
+        <DeleteAction key="delete" handleDelete={handleDelete} row={row} deleteType={deleteType} />
+      )
+      return actionMenu
+    },
+    []
+  )
+
+  return (
+    <div>
+      <BreadCrumb breadcrumbData={breadcrumbData} />
+      <Card className="py-0 rounded shadow-sm gap-0">
+        <CardHeader className="pt-3 px-3 border-b [.border-b]:pb-2">
+          <div className="flex justify-between">
+            <h4 className="font-semibold text-xl">Show Category</h4>
+            <Button>
+              <FiPlus />
+              <Link href={ADMIN_CATEGORY_ADD}>New Category</Link>
+            </Button>
+          </div>
+        </CardHeader>
+
+        <CardContent className="pb-5 px-0">
+          <DatatableWrapper
+            queryKey="category-data"
+            fetchUrl="/api/category"
+            initialPageSize={10}
+            columnConfig={columns}
+            exportEndpoint="/api/category/export"
+            deleteEndpoint="/api/category/delete"
+            deleteType="SD"
+            trashView={`${ADMIN_TRASH}?trashof=category`}
+            createAction={action}
+          />
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+export default ShowCategory

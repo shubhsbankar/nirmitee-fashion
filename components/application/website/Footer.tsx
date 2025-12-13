@@ -12,7 +12,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className='bg-gray-50 border-t'>
+    <footer className='bg-gray-50 border-t pt-5'>
       <div className='grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-10py-10 lg:px-32 px-4 mt-3'>
         <div className='lg:col-span-1 md:col-span-2 col-span-1'>
           <Image src={logo} alt='Nirmitee Fashion Logo' width={250} height={120} className=' w-36 mb-2' />

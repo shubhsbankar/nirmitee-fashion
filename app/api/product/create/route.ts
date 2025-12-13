@@ -20,9 +20,9 @@ export async function POST(request) {
              return response(false, 400, 'Invalid or missing field',validate.error);
          }
          const {name, slug, category, mrp, sellingPrice, description, media, discountPercentage} = validate.data;
-         description = encode(description);
+         const newDescription = encode(description);
          const newProduct  = new ProductModel({
-            name, slug, category, mrp, sellingPrice, description, media, discountPercentage
+            name, slug, category, mrp, sellingPrice, description: newDescription, media, discountPercentage
          });
          await newProduct.save();
         return response(true,200,"Product added successful");
