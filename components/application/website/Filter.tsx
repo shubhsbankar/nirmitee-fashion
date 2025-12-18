@@ -39,6 +39,7 @@ const Filter = () => {
     const { data: sizeData } = useFetch('/api/product-variant/sizes');
 
     const handlePriceChange = (value) => {
+        console.log('Price change:',value);
         setPriceFilter({ minPrice: value[0], maxPrice: value[1] })
     }
 
@@ -187,7 +188,7 @@ const Filter = () => {
                 <AccordionItem value="4">
                     <AccordionTrigger className='uppercase font-semibold hover:no-underline'>price</AccordionTrigger>
                     <AccordionContent>
-                        <Slider defaultValue={[0, 3000]} max={3000} step={1} onValueChange={handlePriceChange} />
+                        <Slider defaultValue={[priceFilter.minPrice, priceFilter.maxPrice]} max={3000} step={1} onValueChange={handlePriceChange} />
                         <div className='flex justify-between items-center pt-2'>
                             <span>{priceFilter.minPrice.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
                             <span>{priceFilter.maxPrice.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import {
     Select,
     SelectContent,
@@ -6,11 +7,17 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { sortings } from "@/lib/utils"
+import { IoFilter } from "react-icons/io5"
+
 
 const Sorting = ({ limit, setLimit, sorting, setSorting,
     mobileFilterOpen, setMobileFilterOpen }) => {
     return (
         <div className='flex justify-between items-center flex-wrap gap-2 bg-gray-50 p-4'>
+            <Button className='lg:hidden' type='button' variant={'outline'} onClick={() => setMobileFilterOpen(!mobileFilterOpen)}>
+                <IoFilter />
+                Filter
+            </Button>
             <ul className='flex items-center gap-4'>
                 <li className='font-semibold'>
                     Show

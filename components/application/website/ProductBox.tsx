@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import imgPlaceholder from '@/public/assets/images/img-placeholder.webp'
 import Link from 'next/link'
+import { WEBSITE_PRODUCT_DETAILS } from '@/routes/WebsiteRoute'
 
 
 const ProductBox = ({product }) => {
   return (
       <div className='rounded-lg hover:shadow-lg border overflow-hidden'>
-          <Link href={''}>
+          <Link href={WEBSITE_PRODUCT_DETAILS(product.slug)}>
           <Image
               src={product?.media[0]?.secure_url || imgPlaceholder.src}
               width={400}
@@ -18,8 +19,8 @@ const ProductBox = ({product }) => {
           <div className='p-3 border-t'>
               <h4>{product?.name}</h4>
               <p className='flex gap-2 text-sm mt-2'>
-                  <span className='line-through text-gray-400'>{product?.mrp.toLocaleString('en-IN', { style: 'currency', currency: 'INR'})}</span>
-                  <span className='font-semibold'>{ product?.sellingPrice.toLocaleString('en-IN', { style: 'currency', currency: 'INR'})}</span>
+                  <span className='line-through text-gray-400'>{product?.mrp?.toLocaleString('en-IN', { style: 'currency', currency: 'INR'})}</span>
+                  <span className='font-semibold'>{ product?.sellingPrice?.toLocaleString('en-IN', { style: 'currency', currency: 'INR'})}</span>
               </p>
               </div>
               </Link>
