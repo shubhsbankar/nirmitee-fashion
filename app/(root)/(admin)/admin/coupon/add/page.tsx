@@ -60,19 +60,19 @@ const AddCoupon = () => {
 
 
   const onSubmit = async (values) => {
-    console.log(values);
+    
     setLoading(true);
     try {
       const { data: response } = await axios.post('/api/coupon/create', values);
       if (!response.success) {
         throw new Error(response.message);
       }
-      console.log(response.message)
+      
       showToast('success', response.message);
       form.reset();
     }
     catch (error) {
-      console.log(error.message)
+      
       showToast('error', error.message);
     }
     finally {

@@ -52,7 +52,7 @@ const LoginPage = () => {
   });
 
   const handleFormSubmit = async (values : LoginInput) => {
-    console.log(values);
+   
     setLoading(true);
 	try {
 		const {data : loginResponse } = await axios.post('/api/auth/login',values);
@@ -60,12 +60,12 @@ const LoginPage = () => {
 			throw new Error(loginResponse.message);
 		}
 		form.reset();
-		console.log(loginResponse.message)
+		
         showToast('success',loginResponse.message);
         setOtpEmail(values.email);
 	}
 	catch (error) {
-		console.log(error.message)
+		
         showToast('error',error.message);
 	}
 	finally{

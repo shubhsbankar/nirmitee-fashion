@@ -32,7 +32,6 @@ export async function middleware(request) {
       }
       return NextResponse.next();
   }catch(error) {
-          console.log(error);
           return NextResponse.redirect(new URL(WEBSITE_LOGIN,request.nextUrl));
   }
 }

@@ -11,7 +11,7 @@ import { MdOutlineShoppingBag } from 'react-icons/md'
 
 function CountOverview() {
     const {data: countData} = useFetch('/api/dashboard/admin/count');
-    console.log(countData)
+    
   return (
     <div className='grid lg:grid-cols-4 sm:grid-cols-2 sm:gap-10 gap-5'>
         <Link href={ADMIN_CATEGORY_SHOW}>

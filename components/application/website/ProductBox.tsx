@@ -1,12 +1,17 @@
+'use client'
 import Image from 'next/image'
 import imgPlaceholder from '@/public/assets/images/img-placeholder.webp'
 import Link from 'next/link'
 import { WEBSITE_PRODUCT_DETAILS } from '@/routes/WebsiteRoute'
+import { useDispatch } from 'react-redux';
+import {set} from '@/store/reducer/selecetedMediaReducer';
 
 
-const ProductBox = ({product }) => {
+const ProductBox = ({ product }) => {
+    console.log(product);
+    const dispatch = useDispatch();
   return (
-      <div className='rounded-lg hover:shadow-lg border overflow-hidden'>
+      <div className='rounded-lg hover:shadow-lg border overflow-hidden' onClick={() => dispatch(set(product?.media[0]?.secure_url))}>
           <Link href={WEBSITE_PRODUCT_DETAILS(product.slug)}>
           <Image
               src={product?.media[0]?.secure_url || imgPlaceholder.src}

@@ -59,7 +59,7 @@ export const nameSchema = z
   .string()
   .min(2, "Name must be at least 2 characters")
   .max(50, "Name cannot exceed 50 characters")
-  // .regex(/^[A-Za-z ]+$/, "Name can contain only alphabets and spaces");
+// .regex(/^[A-Za-z ]+$/, "Name can contain only alphabets and spaces");
 
 
 /**
@@ -88,16 +88,16 @@ export const otpStringSchema = z
   .regex(/^\d{6}$/, { message: "OTP must be exactly 6 digits." });
 
 export const OTPSchema = z.object({
-   email: emailSchema,
-   otp: otpStringSchema
+  email: emailSchema,
+  otp: otpStringSchema
 });
 
 export const resetPasswordSchema = z
-      .object({
-        email: emailSchema,
-        password: passwordSchema,
-        confirmPassword: z.string()
-      }).superRefine((data, ctx) => {
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string()
+  }).superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -107,86 +107,121 @@ export const resetPasswordSchema = z
     }
   });
 
-  export const mediaEditSchema = z.object({
-    _id: z.string().min(3, '_id is required'),
-    alt: z.string().min(3, 'alt is required'),
-    title: z.string().min(3, '_title is required'),
-  });
+export const mediaEditSchema = z.object({
+  _id: z.string().min(3, '_id is required'),
+  alt: z.string().min(3, 'alt is required'),
+  title: z.string().min(3, 'title is required'),
+});
 
-  export const categorySchema = z.object({
-    _id: z.string().min(3, '_id is optional').optional(),
-    name: nameSchema,
-    slug: z.string().min(3, '_slug is required'),
-  });
+export const categorySchema = z.object({
+  _id: z.string().min(3, '_id is optional').optional(),
+  name: nameSchema,
+  slug: z.string().min(3, '_slug is required'),
+});
 
-  export const productSchema = z.object({
-    _id: z.string().min(3, '_id is optional').optional(),
-    name: nameSchema,
-    slug: z.string().min(3, '_slug is required'),
-    category: z.string().min(3,'Category is required'),
-    mrp: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    sellingPrice: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    discountPercentage: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    description: z.string().min(3,'description is required'),
-    media: z.array(z.string()).optional()
-  });
+export const productSchema = z.object({
+  _id: z.string().min(3, '_id is optional').optional(),
+  name: nameSchema,
+  slug: z.string().min(3, '_slug is required'),
+  category: z.string().min(3, 'Category is required'),
+  mrp: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  sellingPrice: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  discountPercentage: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  description: z.string().min(3, 'description is required'),
+  media: z.array(z.string()).optional()
+});
 
-  export const productVariantSchema = z.object({
-    _id: z.string().min(3, '_id is optional').optional(),
-    product: z.string().min(3, 'product is required'),
-    stock: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    sku:z.string().min(3,'color is required'),
-    color: z.string().min(3,'color is required'),
-    size: z.string().min(1,'size is required'),
-    mrp: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    sellingPrice: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    discountPercentage: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    media: z.array(z.string()).optional()
-  });
+export const productVariantSchema = z.object({
+  _id: z.string().min(3, '_id is optional').optional(),
+  product: z.string().min(3, 'product is required'),
+  stock: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  sku: z.string().min(3, 'color is required'),
+  color: z.string().min(3, 'color is required'),
+  size: z.string().min(1, 'size is required'),
+  mrp: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  sellingPrice: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  discountPercentage: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  media: z.array(z.string()).optional()
+});
 
-  export const couponSchema = z.object({
-    _id: z.string().min(3, '_id is optional').optional(),
-    discountPercentage: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-    code: z.string().min(3, '_id is optional'),
-    validity:z.coerce.date(),
-    minShoppingAmount: z.union([
-      z.number().positive('Expected positive value. Received negative'),
-      z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0, 
-                                                      "Please enter valid number")
-    ]),
-  });
+export const couponSchema = z.object({
+  _id: z.string().min(3, '_id is optional').optional(),
+  discountPercentage: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  code: z.string().min(3, '_id is optional'),
+  validity: z.coerce.date(),
+  minShoppingAmount: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+});
+export const reviewSchema = z.object({
+  _id: z.string().min(3, '_id is optional').optional(),
+  product: z.string().min(3, 'product is required'),
+  userId: z.string().min(3, 'User Id is required'),
+  rating: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+  title: z.string().min(3, 'title is required'),
+  review: z.string().min(3, 'Review is required'),
+
+});
+
+export const applyCouponSchema = z.object({
+  code: z.string().min(3, 'Code is required'),
+  minShoppingAmount: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ]),
+}); 
+
+export const orderFormSchema = z.object({
+  name: nameSchema,
+  email: emailSchema,
+  phone: z.string().min(10, 'Phone number is required'),
+  country: z.string().min(3, 'Country is required'),
+  state: z.string().min(3, 'State is required'),
+  city: z.string().min(3, 'City is required'),
+  pincode: z.string().min(6, 'Pincode is required'),
+  landmark: z.string().min(3, 'Landmark is required'),
+  ordernote: z.string().optional(),
+  userId: z.string().min(3, 'userId is required').optional(),
+})
 
 
 

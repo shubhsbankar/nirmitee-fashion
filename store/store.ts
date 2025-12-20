@@ -3,9 +3,13 @@ import localStorage from 'redux-persist/es/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
 import authReducer from '@/store/reducer/authReducer';
+import selectedMediaReducer  from './reducer/selecetedMediaReducer';
+import cartReducer  from './reducer/cartReducer';
 
 const rootReducer = combineReducers({
-    authStore: authReducer
+    authStore: authReducer,
+    selectedMediaStore: selectedMediaReducer,
+    cartStore : cartReducer
 
 });
 

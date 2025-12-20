@@ -1,7 +1,6 @@
 import {
     response,
-    catchError,
-    isAuthenticated
+    catchError
 } from '@/lib/helperFunctions';
 import connectDB from '@/lib/dbConnect';
 import ProductModel from '@/models/product.model';
@@ -24,7 +23,7 @@ export async function GET(request, { params }) {
         const size = searchParams.get('size');
         const color = searchParams.get('color');
 
-        // SD => soft delete, RSD=>restore soft delete, PD=> permenent delete
+
         let filter = {
             deletedAt: null,
 
@@ -41,6 +40,7 @@ export async function GET(request, { params }) {
         if (!data) {
             return response(false, 404, 'Product not found.');
         }
+        console.log('******************', data);
 
         let variantFilter = {
             product: data._id
@@ -86,16 +86,33 @@ export async function GET(request, { params }) {
                 }
 
             ]);
-        
+
         const review = await ReviewModel.countDocuments({ product: data._id });
+        const mediaMap = new Map();
+
+        // Product images FIRST (priority)
+        (data.media || []).forEach(img => {
+            mediaMap.set(String(img._id), img);
+        });
+
+        // Variant images AFTER (only new ones)
+        (variant.media || []).forEach(img => {
+            mediaMap.set(String(img._id), img);
+        });
+
+        const mergedMedia = Array.from(mediaMap.values());
+
         const productData = {
             products: data,
-            variant,
+            variant: {
+                ...variant,
+                media: mergedMedia
+            },
             colors: getColor,
             sizes: getSize.length ? getSize.map(item => item.size) : [],
-            reviewCount : review
+            reviewCount: review
         }
-
+        console.log(productData);
         return response(true, 200, "Product found.", productData);
 
     }

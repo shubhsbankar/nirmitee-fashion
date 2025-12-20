@@ -48,7 +48,7 @@ const EditProduct = ({ params }) => {
   const { data: getProduct } = useFetch('/api/product?deleteType=SD&&size=10000');
 
   const { data: getProductVariant, loading: isProductLoading } = useFetch(`/api/product-variant/get/${id}`);
-  console.log('getProductVariant', getProductVariant);
+  
 
   const [open, setOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Array<{ id: string; url: string }>>([]);
@@ -125,7 +125,7 @@ const EditProduct = ({ params }) => {
   }
 
   const onSubmit = async (values) => {
-    console.log(values);
+    
     setLoading(true);
     try {
       if (selectedMedia.length <= 0) {
@@ -137,11 +137,11 @@ const EditProduct = ({ params }) => {
       if (!response.success) {
         throw new Error(response.message);
       }
-      console.log(response.message)
+      
       showToast('success', response.message);
     }
     catch (error) {
-      console.log(error.message)
+      
       showToast('error', error.message);
     }
     finally {
@@ -149,7 +149,7 @@ const EditProduct = ({ params }) => {
     }
   }
 
-  //console.log('form.getValues',form.getValues('description')) 
+  
 
   return (
     <div>

@@ -42,7 +42,7 @@ const EditCoupon = ({ params }) =>{
 
 
   const {data : getCoupon, loading: isCouponLoading } = useFetch(`/api/coupon/get/${id}`);
-  console.log('getCoupon',getCoupon);
+  
 
  
 
@@ -76,7 +76,7 @@ const EditCoupon = ({ params }) =>{
 
 
    const onSubmit = async (values) => {
-    console.log(values);
+    
     setLoading(true);
     try {
      
@@ -84,11 +84,11 @@ const EditCoupon = ({ params }) =>{
         if ( !response.success ){
             throw new Error(response.message);
         }
-        console.log(response.message)
+        
         showToast('success',response.message);
         }
     catch (error) {
-        console.log(error.message)
+        
         showToast('error',error.message);
     }
     finally{
@@ -96,7 +96,7 @@ const EditCoupon = ({ params }) =>{
         }
   }
 
-  //console.log('form.getValues',form.getValues('description')) 
+ 
 
     return (
         <div>

@@ -45,7 +45,7 @@ const AddProduct = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [productOption, setProductOption] = useState([]);
   const { data: getProduct } = useFetch('/api/product?deleteType=SD&&size=10000');
-  console.log(getProduct);
+  
 
   const [open, setOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Array<{ id: string; url: string }>>([]);
@@ -86,7 +86,7 @@ const AddProduct = () => {
 
 
   const onSubmit = async (values) => {
-    console.log('Hi...Values',values);
+    
     setLoading(true);
     try {
       if (selectedMedia.length <= 0) {
@@ -98,13 +98,13 @@ const AddProduct = () => {
       if (!response.success) {
         throw new Error(response.message);
       }
-      console.log(response.message)
+      
       showToast('success', response.message);
       form.reset();
       setSelectedMedia([]);
      }
     catch (error) {
-      console.log(error.message)
+      
       showToast('error', error.message);
     }
     finally {

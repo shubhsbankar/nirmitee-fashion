@@ -68,18 +68,18 @@ const EditCategory = ({params}) =>{
 
 
   const onSubmit = async (values) => {
-    console.log(values);
+    
     setLoading(true);
 	try {
        const {data : response } = await axios.put('/api/category/update',values);
 		if ( !response.success ){
 			throw new Error(response.message);
 		}
-		console.log(response.message)
+		
         showToast('success',response.message);
 	}
 	catch (error) {
-		console.log(error.message)
+		
         showToast('error',error.message);
 	}
 	finally{

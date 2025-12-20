@@ -48,7 +48,7 @@ const MediaPage = () =>{
 
     const fetchMedia = async (page, deleteType) => {
         const { data : response } = await axios.get(`/api/media?page=${page}&&limit=10&&deleteType=${deleteType}`);
-        console.log(response);
+        
         return response;
     }
 	const {
@@ -68,7 +68,7 @@ const MediaPage = () =>{
             return lastPage.data.hasMore ? nextPage : undefined;
         },
 	  });
-      console.log('hasNextPage',hasNextPage);
+      
       const deleteMutation = useDeleteMutation('media-data','/api/media/delete');
 
       const handleDelete = (ids, deleteType) => {
