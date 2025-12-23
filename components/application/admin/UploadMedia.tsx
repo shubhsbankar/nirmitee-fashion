@@ -45,8 +45,8 @@ const UploadMedia = ({ queryClient, isMultiple }) =>{
   }
     return (
       <CldUploadWidget signatureEndpoint="/api/cloudinary-signature"
-        //uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPDATE_PRESET}
-        uploadPreset="nirmitee-fashion"
+        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+        //uploadPreset="nirmitee-fashion"
         onError={handleOnError}
         onQueuesEnd={handleOnQueueEnd}
         onSuccess={handleOnSuccess}

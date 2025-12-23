@@ -223,7 +223,19 @@ export const orderFormSchema = z.object({
   userId: z.string().min(3, 'userId is required').optional(),
 })
 
+export const orderIdSchema = z.object({
+  amount: z.union([
+    z.number().positive('Expected positive value. Received negative'),
+    z.string().transform(val => Number(val)).refine(val => !isNaN(val) && val >= 0,
+      "Please enter valid number")
+  ])
+});
 
+export const profileSchema = z.object({
+  fullName: nameSchema,
+  phone: z.string().min(10, 'Phone number is required'),
+  address: z.string().min(3, 'Address is required'),
+});
 
 /** Types inferred from schemas */
 export type LoginInput = z.infer<typeof loginSchema>;

@@ -19,7 +19,8 @@ import Search from './Search'
 const Header = () => {
   const [isMobileMenu, setIsMobileMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-    const auth = useSelector(store => store.authStore.auth);
+  const auth = useSelector(store => store.authStore.auth);
+  console.log('Header auth: ', auth);
   return (
     <div className='bg-white border-b lg:px-32 px-4'>
       <div className='flex items-center justify-between lg:py-2 py-3'>
@@ -71,7 +72,7 @@ const Header = () => {
          (
          <Link href={USER_DASHBOARD}>
            <Avatar>
-            <AvatarImage src={auth.user?.avatar?.url || userImage.src}/>
+            <AvatarImage src={auth?.avatar?.url || userImage.src}/>
            </Avatar>
          </Link>)
 

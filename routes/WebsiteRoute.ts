@@ -5,8 +5,11 @@ export const WEBSITE_RESET_PASSWORD= '/auth/reset-password';
 
 //Use routes
 export const USER_DASHBOARD = '/my-account';
-export const WEBSITE_SHOP = '/shop';
+export const USER_PROFILE = '/profile';
+export const USER_ORDERS = '/orders';
 
+export const WEBSITE_SHOP = '/shop';
 export const WEBSITE_PRODUCT_DETAILS = (slug) => slug ? `/product/${slug}` : '/product';
 export const WEBSITE_CART = '/cart';
 export const WEBSITE_CHECKOUT = '/checkout';
+export const WEBSITE_ORDER_DETAILS = (orderId) => `/order-details/${orderId}`;

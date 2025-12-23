@@ -2,7 +2,7 @@
 import WebsiteBreadCrumb from "@/components/application/website/WebsiteBreadCrumb"
 import { Button } from "@/components/ui/button";
 import useFetch from "@/hooks/useFetch";
-import { WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { WEBSITE_ORDER_DETAILS, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 import { addIntoCart, clearCart } from "@/store/reducer/cartReducer";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,6 +19,9 @@ import axios from "axios";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { FaShippingFast } from "react-icons/fa";
 import { Textarea } from "@/components/ui/textarea";
+import Script from "next/script";
+import { useRouter } from "next/navigation";
+import loading from '@/public/assets/images/loading.svg';
 
 
 
@@ -30,8 +33,9 @@ const breadCrumb = {
 }
 
 const Checkout = () => {
+  const router = useRouter();
   const cart = useSelector(store => store.cartStore);
-  const auth = useSelector(store => store.authStore);
+  const auth = useSelector(store => store.authStore.auth);
   const dispatch = useDispatch();
 
   const [verifiedCartData, setVerifiedCartData] = useState([]);
@@ -43,6 +47,7 @@ const Checkout = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [couponCode, setCouponCode] = useState('');
   const [placingOrder, setPlacingOrder] = useState(false);
+  const [savingOrder,setSavingOrder] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(applyCouponSchema),
@@ -68,12 +73,85 @@ const Checkout = () => {
     }
   });
 
-  console.log('***',orderForm.formState.errors);
+  useEffect(() => { 
+    orderForm.setValue('userId',auth?._id)
+  }, [auth]);
 
+
+  const getOrderId = async (amount) => {
+    try {
+      const { data: orderIdData } = await axios.post('/api/payment/get-order-id', { amount });
+
+      if (!orderIdData.success) {
+        throw new Error(orderIdData.message);
+      }
+      return { success: true, order_id: orderIdData.data };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
   const placeOrder = async (formData) => {
     setPlacingOrder(true);
     try {
-      console.log(formData);
+      const orderId = await getOrderId(totalAmount);
+      if (!orderId.success) {
+        throw new Error(orderId.message);
+      }
+      const order_id = orderId.order_id;
+      const razorOption = {
+        "key": process.env.NEXT_PUBLIC_RAZORPAY_API_KEY,
+        "amount": totalAmount * 100,
+        "currency": "INR",
+        "name": "Nirmitee Fashion",
+        "description": "Transaction for order",
+        "image": "https://res.cloudinary.com/dwcgtu013/image/upload/v1766295854/NFLogo_btkay3.webp",
+        "order_id": order_id,
+        handler: async function (response) {
+        setSavingOrder(true)
+          const products = verifiedCartData.map(item => ({
+            productId: item.productId,
+            variantId: item.variantId,
+            qty: item.qty,
+            name: item.name,
+            mrp: item.mrp,
+            sellingPrice: item.sellingPrice
+          }));
+          const { data: paymentResponseData } = await axios.post('/api/payment/save-order', {
+            ...formData,
+            ...response,
+            products,
+            subtotal,
+            discount,
+            couponDiscountAmount,
+            totalAmount
+          });
+          if (paymentResponseData.success) {
+            showToast('success', paymentResponseData.message);
+            dispatch(clearCart());
+            orderForm.reset();
+            router.push(WEBSITE_ORDER_DETAILS(response.razorpay_order_id));
+          setSavingOrder(false);
+          } else {
+          setSavingOrder(false);
+            showToast('error', paymentResponseData.message);
+          }
+
+        },
+        "prefill": {
+          "name": formData.name,
+          "email": formData.email,
+          "contact": formData.phone,
+        },
+        "theme": {
+          "color": "#7c3aed"
+        }
+      };
+
+      const razor = new Razorpay(razorOption);
+      razor.on('payment.failed', function (response) {
+        showToast('error', response.error.description);
+      });
+      razor.open();
     } catch (error) {
       showToast('error', error.message);
     } finally {
@@ -127,7 +205,7 @@ const Checkout = () => {
       setCouponLoading(false);
     }
   }
-  
+
 
   const removeCoupon = () => {
     setIsCouponApplied(false);
@@ -138,6 +216,14 @@ const Checkout = () => {
 
   return (
     <div>
+      {
+        savingOrder && <div className="h-screen w-screen fixed top-0 left-0 z-50 bg-black/10">
+          <div className="flex justify-center items-center h-screen">
+            <Image src={loading.src} height={80} width={80} alt={'Loading'} />
+            <h4 className="font-semibold">Order Confirming...</h4>
+          </div>
+        </div>
+      }
       <WebsiteBreadCrumb props={breadCrumb} />
       {
         cart.count === 0
@@ -280,7 +366,7 @@ const Checkout = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <Textarea placeholder="Order note" />
+                              <Textarea placeholder="Order note" {...field}/>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -288,7 +374,7 @@ const Checkout = () => {
                       ></FormField>
                     </div>
                     <div className="mb-3">
-                      <ButtonLoading type={'submit'} text='Place Order' loading={ placingOrder} className={'bg-black rounded-full px-5 cursor-pointer'} />
+                      <ButtonLoading type={'submit'} text='Place Order' loading={placingOrder} className={'bg-black rounded-full px-5 cursor-pointer'} />
                     </div>
                   </form>
                 </Form>
@@ -397,6 +483,8 @@ const Checkout = () => {
             </div>
           </div>
       }
+
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </div>
   )
 }

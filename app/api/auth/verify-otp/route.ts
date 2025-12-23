@@ -32,7 +32,7 @@ export async function POST(request){
        }
        
        const loggedInUserData = {
-          _id: user._id,
+          _id: user._id.toString(),
           role: user.role,
           fullName: user.fullName,
           avatar: user.avatar,

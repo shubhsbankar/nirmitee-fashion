@@ -18,4 +18,6 @@ export const sortings = [
   { label: 'Descending', value: 'desc' },
   { label: 'Price: Low To High', value: 'price_low_high' },
   { label: 'Price: High To Low', value: 'price_high_low' },
-  ]
+]
+
+export const orderStatus = ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'unverified'];
