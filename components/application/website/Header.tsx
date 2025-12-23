@@ -42,16 +42,16 @@ const Header = () => {
                     <Link href={WEBSITE_HOME} className='block py-2'>Home</Link>
                 </li>
                 <li className='text-gray-600 hover:text-primary hover:font-semibold'>
-                    <Link href='' className='block py-2'>About</Link>
+                    <Link href='/about-us' className='block py-2'>About</Link>
                 </li>
                 <li className='text-gray-600 hover:text-primary hover:font-semibold'>
                     <Link href={WEBSITE_SHOP} className='block py-2'>Shop</Link>
                 </li>
                 <li className='text-gray-600 hover:text-primary hover:font-semibold'>
-                    <Link href='' className='block py-2'>Imetation Jwellary</Link>
+                    <Link href={`${WEBSITE_SHOP}?category=imitation-jewellery`} className='block py-2'>Imetation Jwellary</Link>
                 </li>
                 <li className='text-gray-600 hover:text-primary hover:font-semibold'>
-                    <Link href='' className='block py-2'>Cosmetics</Link>
+                    <Link href={`${WEBSITE_SHOP}?category=cosmetics`} className='block py-2'>Cosmetics</Link>
                 </li>
             </ul>
           </nav>

@@ -17,24 +17,25 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { useEffect, useState } from "react"
+import useFetch from "@/hooks/useFetch"
 
 export const description = "A bar chart"
 
-const chartData = [
-    { month: "January", amount: 186 },
-    { month: "February", amount: 305 },
-    { month: "March", amount: 237 },
-  { month: "April", amount: 73 },
-  { month: "May", amount: 209 },
-  { month: "June", amount: 214 },
-  { month: "July", amount: 765 },
-  { month: "August", amount: 245 },
-  { month: "September", amount: 624 },
-  { month: "October", amount: 875 },
-  { month: "November", amount: 44 },
-  { month: "December", amount: 158 },
-]
-
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const chartConfig = {
   amount: {
@@ -44,6 +45,22 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function OrderOverview() {
+  const [chartData, setChartData] = useState([]);
+  const { data: monthlySales, loading } = useFetch('/api/dashboard/admin/monthly-sales');
+  useEffect(() => {
+    if (monthlySales && monthlySales.success) {
+      const getChartData = months.map((month, index) => {
+        const monthData = monthlySales.data.find(item => item._id.month === index + 1);
+        return {
+          month,
+          amount: monthData ? monthData : 0
+        }
+      });
+      setChartData(getChartData);
+    }
+  }, [monthlySales]);
+
+  
   return (
  <div>
       <CardContent>

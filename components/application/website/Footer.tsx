@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import logo from '@/public/assets/images/dark-logo.png';
 import Link from 'next/link';
-import { WEBSITE_HOME, WEBSITE_LOGIN, WEBSITE_REGISTER } from '@/routes/WebsiteRoute';
+import { USER_DASHBOARD, WEBSITE_HOME, WEBSITE_LOGIN, WEBSITE_REGISTER, WEBSITE_SHOP } from '@/routes/WebsiteRoute';
 import { IoLocationOutline } from 'react-icons/io5';
 import { MdOutlineEmail, MdOutlinePhone } from 'react-icons/md';
 import { AiOutlineYoutube } from 'react-icons/ai';
@@ -25,10 +25,10 @@ const Footer = () => {
           <h4 className='text-xl font-bold uppercase mb-5'>Categories</h4>
           <ul>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Imetation Jwelary</Link>
+              <Link href={`${WEBSITE_SHOP}?category=imitation-jewellery`}>Imetation Jwelary</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Cosmetics</Link>
+              <Link href={`${WEBSITE_SHOP}?category=cosmetics`}>Cosmetics</Link>
             </li>
           </ul>
         </div>
@@ -40,10 +40,10 @@ const Footer = () => {
               <Link href={WEBSITE_HOME}>Home</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Shop</Link>
+              <Link href={WEBSITE_SHOP}>Shop</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>About</Link>
+              <Link href='/about-us'>About</Link>
             </li>
             <li className='mb-2 text-gray-500'>
               <Link href={WEBSITE_REGISTER}>Register</Link>
@@ -58,19 +58,19 @@ const Footer = () => {
           <h4 className='text-xl font-bold uppercase mb-5'>Help Center</h4>
           <ul>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Register</Link>
+              <Link href={WEBSITE_REGISTER}>Register</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Login</Link>
+              <Link href={WEBSITE_LOGIN}>Login</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>My Account</Link>
+              <Link href={USER_DASHBOARD}>My Account</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Privacy Policy</Link>
+              <Link href='/privacy-policy'>Privacy Policy</Link>
             </li>
             <li className='mb-2 text-gray-500'>
-              <Link href=''>Terms & Conditions</Link>
+              <Link href='/terms-and-conditions'>Terms & Conditions</Link>
             </li>
           </ul>
         </div>

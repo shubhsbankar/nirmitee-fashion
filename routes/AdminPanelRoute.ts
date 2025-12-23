@@ -27,4 +27,8 @@ export const ADMIN_CUSTOMERS_SHOW='/admin/customers';
 export const ADMIN_REVIEW_SHOW='/admin/review';
 
 
-export const ADMIN_TRASH='/admin/trash';
+export const ADMIN_TRASH = '/admin/trash';
+
+
+export const ADMIN_ORDER_SHOW = '/admin/orders';
+export const ADMIN_ORDER_DETAILS= (order_id) => order_id ? `/admin/orders/details/${order_id}` : '';

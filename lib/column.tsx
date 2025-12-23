@@ -175,3 +175,69 @@ export const DT_REVIEW_COLUMN = [
     header: "Review",
   },
 ];
+
+
+export const DT_ORDER_COLUMN = [
+  {
+    accessorKey: "order_id", //access nested data with dot notation
+    header: "Order Id",
+  },
+  {
+    accessorKey: "payment_id", //access nested data with dot notation
+    header: "Payment Id",
+  },
+  {
+    accessorKey: "name",
+    header: "Full Name",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+  },
+  {
+    accessorKey: "country",
+    header: "Country",
+  },
+  {
+    accessorKey: "state",
+    header: "State",
+  },
+  {
+    accessorKey: "city",
+    header: "City",
+  },
+  {
+    accessorKey: "pincode",
+    header: "Pincode",
+  },
+  {
+    accessorKey: "products",
+    header: "Total Items",
+    Cell: ({ renderedCellValue }) => (<span>{ renderedCellValue?.length || 0}</span>)
+  },
+  {
+    accessorKey: "subtotal",
+    header: "Subtotal",
+  },
+  {
+    accessorKey: "discount",
+    header: "Discount",
+    Cell: ({ renderedCellValue }) => (<span>{ Math.round(renderedCellValue)}</span>)
+  },
+  {
+    accessorKey: "couponDiscountAmount",
+    header: "Coupon Discount Amount",
+  },
+  {
+    accessorKey: "totalAmount",
+    header: "Total Amount",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+  }
+];

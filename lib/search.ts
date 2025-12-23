@@ -7,7 +7,7 @@ import {
    ADMIN_CUSTOMERS_SHOW,
    ADMIN_DASHBOARD,
    ADMIN_MEDIA_SHOW,
-   //ADMIN_ORDER_SHOW,
+   ADMIN_ORDER_SHOW,
    ADMIN_PRODUCT_ADD,
    ADMIN_PRODUCT_SHOW,
    ADMIN_PRODUCT_VARIANT_SHOW,
@@ -67,8 +67,7 @@ const searchData = [
    {
        label: "Orders",
        description: "Manage customer orders",
-       //url: ADMIN_ORDER_SHOW,
-       url: '',
+       url: ADMIN_ORDER_SHOW,
        keywords: ["orders"]
    },
    {

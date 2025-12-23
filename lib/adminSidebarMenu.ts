@@ -18,7 +18,8 @@ import {
   ADMIN_COUPON_ADD,
   ADMIN_COUPON_SHOW,
   ADMIN_CUSTOMERS_SHOW,
-  ADMIN_REVIEW_SHOW
+  ADMIN_REVIEW_SHOW,
+  ADMIN_ORDER_SHOW
 } from '@/routes/AdminPanelRoute';
 
 export const adminAppSidebarMenu = [
@@ -83,7 +84,7 @@ export const adminAppSidebarMenu = [
   },
   {
     title : "Orders",
-    url: '#',
+    url: ADMIN_ORDER_SHOW,
     icon: MdOutlineShoppingBag,
   },
   {

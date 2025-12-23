@@ -1,15 +1,30 @@
+'use client'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import useFetch from "@/hooks/useFetch";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import notFound from '@/public/assets/images/not-found.png';
+import { statusBadge } from "@/lib/clientHelperFunctions";
 
 const LatestOrders = () => {
+  const [latestOrder, setLatestOrder] = useState([]);
+  const { data, loading } = useFetch('/api/dashboard/admin/latest-order');
+  useEffect(() => {
+    if (data && data.success) {
+      setLatestOrder(data.data);
+    }
+  }, [data]);
+  if (loading) return <div className="h-full w-full flex justify-center items-center">Loading...</div>
+  if (!latestOrder || latestOrder.length === 0) return <div className="h-full w-full flex justify-center items-center">
+    <Image src={ notFound.src} height={notFound.height} width={notFound.width} alt="not found" className="w-20" /></div>
+  
   return (
     <Table>
       <TableHeader>
@@ -22,13 +37,13 @@ const LatestOrders = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array.from({length : 20}).map((_,i) => (
-          <TableRow key={i}>
-            <TableCell >{`INV00${i+1}`}</TableCell>
-            <TableCell>{`PAY${i+1}`}</TableCell>
-            <TableCell>{3}</TableCell>
-            <TableCell>Pending</TableCell>
-            <TableCell className="text-right">{100}</TableCell>
+        {latestOrder?.map((order) => (
+          <TableRow key={order._id}>
+            <TableCell >{order._id}</TableCell>
+            <TableCell>{order.payment_id}</TableCell>
+            <TableCell>{order.products.length}</TableCell>
+            <TableCell>{statusBadge(order.status)}</TableCell>
+            <TableCell className="text-right">{order.totalAmount.toLocaleString('en-IN',{style:'currency',currency:'INR'})}</TableCell>
           </TableRow>
         ))}
       </TableBody>

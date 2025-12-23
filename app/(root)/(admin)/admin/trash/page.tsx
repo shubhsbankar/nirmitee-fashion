@@ -13,7 +13,8 @@ import {
     DT_PRODUCT_VARIANT_COLUMN,
     DT_COUPON_COLUMN,
     DT_CUSTOMERS_COLUMN,
-    DT_REVIEW_COLUMN
+    DT_REVIEW_COLUMN,
+    DT_ORDER_COLUMN
 } from '@/lib/column';
 import DeleteAction from '@/components/application/admin/DeleteAction';
 import { useSearchParams } from 'next/navigation';
@@ -71,6 +72,13 @@ const TRASH_CONFIG = {
         fetchUrl: '/api/review',
         exportUrl: '/api/review/export',
         deleteUrl: '/api/review/delete',
+    },
+    orders: {
+        title: 'Orders Trash',
+        columns: DT_ORDER_COLUMN,
+        fetchUrl: '/api/orders',
+        exportUrl: '/api/orders/export',
+        deleteUrl: '/api/orders/delete',
     }
 };
 

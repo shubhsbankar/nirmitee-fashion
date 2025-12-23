@@ -8,16 +8,15 @@ import { mediaEditSchema } from '@/lib/zodSchema';
 
 export async function PUT(request) {
     try {
-         console.log('Shubham : ');
          const auth = await isAuthenticated('admin');
-         console.log('auth.isAuth : ',auth.isAuth);
+        
          if (!auth.isAuth){
              return response(false, 403, 'Unauthorised');
          }
          await connectDB();
 
         const  payload = await request.json();
-        console.log('payload',payload); 
+        
         const validate = mediaEditSchema.safeParse(payload);
         if(!validate.success) {
              return response(false, 400, 'Invalid or missing field');
