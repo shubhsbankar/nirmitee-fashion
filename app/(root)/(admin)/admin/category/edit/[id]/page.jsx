@@ -38,7 +38,7 @@ const breadcrumbData = [
 
 const EditCategory = ({params}) =>{
     const { id } = use(params);
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = useState(false);
     const { data: categoryData } = useFetch(`/api/category/get/${id}`);
 
   const form = useForm({

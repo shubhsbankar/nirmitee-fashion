@@ -38,7 +38,7 @@ const breadcrumbData = [
 ];
 
 const EditMedia = ( {params}) =>{
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = useState(false);
    const { id } = use(params);
    const {data : mediaData,error} = useFetch(`/api/media/get/${id}`);
      

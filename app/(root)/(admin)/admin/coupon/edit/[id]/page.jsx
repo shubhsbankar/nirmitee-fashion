@@ -38,7 +38,7 @@ const breadcrumbData = [
 
 const EditCoupon = ({ params }) =>{
     const {id} = use(params);
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = useState(false);
 
 
   const {data : getCoupon, loading: isCouponLoading } = useFetch(`/api/coupon/get/${id}`);

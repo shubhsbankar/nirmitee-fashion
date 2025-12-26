@@ -23,7 +23,7 @@ import axios from 'axios';
 import { showToast } from '@/lib/showToast';
 
 const OTPVerification = ({email, onSubmit, loading}) => {
-    const [isResendingOtp, setIsResendingOtp] = useState<boolean>(false);
+    const [isResendingOtp, setIsResendingOtp] = useState(false);
 const form = useForm({
        resolver: zodResolver(OTPSchema),
        defaultValues: {

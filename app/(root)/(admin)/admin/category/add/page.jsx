@@ -36,7 +36,7 @@ const breadcrumbData = [
 ];
 
 const AddCategory = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(categorySchema),

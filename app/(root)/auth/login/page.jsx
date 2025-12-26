@@ -29,9 +29,9 @@ import { login } from '@/store/reducer/authReducer';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const LoginPage = () => {
-  const [ loading, setLoading] = useState<boolean>(false);
-  const [ otpVerificationLoading, setOtpVerificationLoading] = useState<boolean>(false);
-  const [ isPasswordType, setIsPasswordType] = useState<boolean>(true);
+  const [ loading, setLoading] = useState(false);
+  const [ otpVerificationLoading, setOtpVerificationLoading] = useState(false);
+  const [ isPasswordType, setIsPasswordType] = useState(true);
   const [otpEmail, setOtpEmail] = useState();
   
   const searchParams = useSearchParams();

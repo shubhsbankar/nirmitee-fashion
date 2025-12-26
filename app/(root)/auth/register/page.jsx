@@ -24,8 +24,8 @@ import axios from 'axios'
 import { showToast } from '@/lib/showToast';
 
 const RegisterPage = () => {
-  const [ loading, setLoading] = useState<boolean>(false);
-  const [ isPasswordType, setIsPasswordType] = useState<boolean>(true);
+  const [ loading, setLoading] = useState(false);
+  const [ isPasswordType, setIsPasswordType] = useState(true);
 
   const form = useForm({
     resolver: zodResolver(signupSchema),

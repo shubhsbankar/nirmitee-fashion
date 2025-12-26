@@ -42,7 +42,7 @@ const breadcrumbData = [
 
 const EditProduct = ({ params }) =>{
     const {id} = use(params);
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = useState(false);
   const [ categoryOption, setCategoryOption] = useState([]);
   const [categoryData, setCategoryData] = useState({});
   const {data : getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');

@@ -41,7 +41,7 @@ const breadcrumbData = [
 ];
 
 const AddCoupon = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
  
 

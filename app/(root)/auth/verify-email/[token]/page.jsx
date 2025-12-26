@@ -13,7 +13,7 @@ import Image from 'next/image'
 
 const EmailVerification = ( { params }) => {
   const { token } = use(params);
-  const [isVerified, setIsVerified]=  useState<boolean | null>(null);
+  const [isVerified, setIsVerified]=  useState(null);
 
   useEffect(() => {
     const verify = async () => {

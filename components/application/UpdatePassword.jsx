@@ -24,8 +24,8 @@ import { useRouter } from 'next/navigation';
 import { WEBSITE_LOGIN } from '@/routes/WebsiteRoute';
 
 const UpdatePassword = ({ email }) => {
-  const [ loading, setLoading] = useState<boolean>(false);
-  const [ isPasswordType, setIsPasswordType] = useState<boolean>(true);
+  const [ loading, setLoading] = useState(false);
+  const [ isPasswordType, setIsPasswordType] = useState(true);
   const router = useRouter();
 
   const form = useForm({

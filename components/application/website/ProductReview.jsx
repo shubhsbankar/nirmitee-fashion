@@ -25,7 +25,7 @@ const ProductReview = ({ productId }) => {
     const queryClient = useQueryClient();
     const auth = useSelector(store => store.authStore.auth);
     
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const [currentUrl, setCurrentUrl] = useState('');
     const [isReview, setIsReview] = useState(false);
     const [reviewCount, setReviewCount] = useState(0);
