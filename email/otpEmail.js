@@ -125,7 +125,7 @@ export const otpEmail = (otp) => {
 																	style="line-height:10px">
 																	<div style="max-width: 250px;"><img
 																			alt="opt" height="auto"
-																			src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517086/otp-email_or9ibr.webp"
+																			src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763151/otp-email_yq6wic.webp"
 																			style="display: block; height: auto; border: 0; width: 100%;"
 																			title="otp" width="250" /></div>
 																</div>

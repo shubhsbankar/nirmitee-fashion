@@ -118,7 +118,7 @@ const Testimonial = () => {
                         <div key={index} className="p-5">
                             <div className="rounded-lg p-5 border h-auto">
                                 <BsChatQuote size={30} className="mb-3"/>
-                                <p className="pb-5">{item.review}</p>
+                                <p className="pb-5 line-clamp-2">{item.review}</p>
                                 <h4 className="font-semibold">{item.name}</h4>
                                 <div className="flex mt-1">
                                     {

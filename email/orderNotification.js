@@ -210,7 +210,7 @@ export const orderNotification = (data) => {
 																style="width:100%;padding-right:0px;padding-left:0px;">
 																<div align="center" class="alignment">
 																	<div style="max-width: 248px;"><img alt="Logo"
-																			height="auto" src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517349/NFLogo_buleyv.webp"
+																			height="auto" src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763151/otp-email_yq6wic.webp"
 																			style="display: block; height: auto; border: 0; width: 100%;"
 																			title="Logo" width="248" /></div>
 																</div>
@@ -285,7 +285,7 @@ export const orderNotification = (data) => {
 																style="width:100%;padding-right:0px;padding-left:0px;">
 																<div align="center" class="alignment">
 																	<div style="max-width: 13px;"><img alt="Check"
-																			height="auto" src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517083/check-orange_zqqdaz.webp"
+																			height="auto" src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763147/check-orange_ks1vyz.webp"
 																			style="display: block; height: auto; border: 0; width: 100%;"
 																			title="Check" width="13" /></div>
 																</div>
@@ -426,7 +426,7 @@ export const orderNotification = (data) => {
 																<div align="center" class="alignment">
 																	<div style="max-width: 130px;"><img
 																			alt="a hand with a star" height="auto"
-																			src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517084/order-conf-icon_em5w0y.webp"
+																			src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763148/order-conf-icon_uti6nt.webp"
 																			style="display: block; height: auto; border: 0; width: 100%;"
 																			title="a hand with a star" width="130" />
 																	</div>
@@ -525,7 +525,7 @@ export const orderNotification = (data) => {
 																					href="https://www.facebook.com/"
 																					target="_blank"><img alt="facebook"
 																						height="auto"
-																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517083/facebook2x_mbf6ph.webp"
+																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763148/facebook2x_koghfm.webp"
 																						style="display: block; height: auto; border: 0;"
 																						title="facebook"
 																						width="32" /></a></td>
@@ -533,7 +533,7 @@ export const orderNotification = (data) => {
 																					href="https://www.twitter.com/"
 																					target="_blank"><img alt="twitter"
 																						height="auto"
-																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517084/twitter2x_jevght.webp"
+																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763148/twitter2x_vxaijp.webp"
 																						style="display: block; height: auto; border: 0;"
 																						title="twitter"
 																						width="32" /></a></td>
@@ -541,7 +541,7 @@ export const orderNotification = (data) => {
 																					href="https://www.instagram.com/"
 																					target="_blank"><img alt="instagram"
 																						height="auto"
-																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1764517083/instagram2x_qlbm1h.webp"
+																						src="https://res.cloudinary.com/dwcgtu013/image/upload/v1766763148/instagram2x_juyhgm.webp"
 																						style="display: block; height: auto; border: 0;"
 																						title="instagram"
 																						width="32" /></a></td>
