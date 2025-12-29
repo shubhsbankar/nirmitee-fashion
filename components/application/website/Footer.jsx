@@ -94,15 +94,15 @@ const Footer = () => {
           <div className='flex gap-5 mt-5'>
             <Link href=''><AiOutlineYoutube className='text-primary' size={25} /></Link>
             <Link href=''><FaInstagram className='text-primary' size={25} /></Link>
-            <Link href=''><FaWhatsapp className='text-primary' size={25}/></Link>
-            <Link href=''><TiSocialFacebookCircular className='text-primary' size={25}/></Link>
-            <Link href=''><FaXTwitter className='text-primary' size={25}/></Link>
+            <Link href=''><FaWhatsapp className='text-primary' size={25} /></Link>
+            <Link href=''><TiSocialFacebookCircular className='text-primary' size={25} /></Link>
+            <Link href=''><FaXTwitter className='text-primary' size={25} /></Link>
           </div>
         </div>
       </div>
 
       <div className='py-5 bg-gray-100'>
-        <p className='text-center'>© 2025 Nirmitee Fashion. All rights reserved.</p>
+        <p className='text-center'>© {new Date().getFullYear()} Nirmitee Fashion. All rights reserved.</p>
 
       </div>
 
