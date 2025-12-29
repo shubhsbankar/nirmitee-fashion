@@ -23,15 +23,13 @@ export async function POST(request) {
          if (!validatedData) {
              return response(false, 400, "Invalid input.");
          }
-
-        console.log("********validatedData*******",validatedData);
          const { email, password } = validatedData.data;
          const user = await UserModel.findOne({ deletedAt: null, email }).select("+password");
 
          if (!user) {
              return response(false,404,"Invalid login credentials.");
          }
-        console.log("********User*******",user);
+       
 
          if (!user.isEmailVerified) {
              sendEmailVerificationLink(user._id,email);
@@ -51,9 +49,11 @@ export async function POST(request) {
 
          const newOtp = new OTPModel({email, otp});
 
-         await newOtp.save();
+        await newOtp.save();
+        
+        const year = new Date().getFullYear();
 
-         const otpEmailStatus = await sendMail("Your login verification code",email,otpEmail(otp));
+         const otpEmailStatus = await sendMail("Your login verification code",email,otpEmail(otp, year));
 
          if (!otpEmailStatus) {
              return response(false, 500,'Failed to send otp');

@@ -33,8 +33,10 @@ export async function POST(request){
       const newOtp = new OTPModel({email, otp});
 
       await newOtp.save();
+       
+       const year = new Date().getFullYear();
 
-      const otpEmailStatus = await sendMail("Your login verification code",email,otpEmail(otp));
+      const otpEmailStatus = await sendMail("Your login verification code",email,otpEmail(otp, year));
 
       if (!otpEmailStatus) {
           return response(false, 500,'Failed to re-send otp');

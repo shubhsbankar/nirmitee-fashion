@@ -2,7 +2,7 @@
 import { USER_DASHBOARD, WEBSITE_HOME, WEBSITE_LOGIN, WEBSITE_SHOP } from '@/routes/WebsiteRoute'
 import Image from 'next/image'
 import Link from 'next/link'
-import logo from '@/public/assets/images/dark-logo.png'
+import logo from '@/public/assets/images/nf_logo.png'
 import { IoIosSearch, IoMdClose } from 'react-icons/io'
 import Cart from './Cart'
 import { VscAccount } from "react-icons/vsc";

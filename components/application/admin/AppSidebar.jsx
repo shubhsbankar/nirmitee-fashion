@@ -26,8 +26,6 @@ import { LuChevronRight } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
 import { adminAppSidebarMenu } from '@/lib/adminSidebarMenu';
 import Link from 'next/link';
-//import logoBlack from '@/public/assets/images/dark-logo.png';
-//import logoWhite from '@/public/assets/images/light-logo.png';
 
 const AppSidebar = () =>{
     const {toggleSidebar} = useSidebar();
