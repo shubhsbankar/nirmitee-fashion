@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/collapsible";
 import Image from 'next/image';
 import logoBlack from '@/public/assets/images/nf_logo.png';
-import logoWhite from '@/public/assets/images/logo-white.png';
+import logoWhite from '@/public/assets/images/nf_logo.png';
 import { Button } from "@/components/ui/button";
 import { LuChevronRight } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
