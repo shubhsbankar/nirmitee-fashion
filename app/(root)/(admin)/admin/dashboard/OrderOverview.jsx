@@ -53,17 +53,17 @@ export function OrderOverview() {
         const monthData = monthlySales.data.find(item => item._id.month === index + 1);
         return {
           month,
-          amount: monthData ? monthData : 0
+          amount: monthData ? monthData?.totalSales : 0
         }
       console.log('monthData',monthData);
-      console.error('monthData', monthData);
+      
       });
       setChartData(getChartData);
 
       console.log('monthlySales',monthlySales);
-      console.error('monthlySales', monthlySales);
-      console.log('monthlySales',getChartData);
-      console.error('monthlySales', getChartData);
+      
+      console.log('getChartData',getChartData);
+      
     }
   }, [monthlySales]);
 
