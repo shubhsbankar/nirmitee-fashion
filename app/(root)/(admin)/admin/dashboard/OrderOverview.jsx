@@ -57,6 +57,12 @@ export function OrderOverview() {
         }
       });
       setChartData(getChartData);
+      console.log('monthData',monthData);
+      console.error('monthData', monthData);
+      console.log('monthlySales',monthlySales);
+      console.error('monthlySales', monthlySales);
+      console.log('monthlySales',getChartData);
+      console.error('monthlySales', getChartData);
     }
   }, [monthlySales]);
 
