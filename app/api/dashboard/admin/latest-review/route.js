@@ -1,6 +1,8 @@
 import connectDB from "@/lib/dbConnect";
 import { catchError, isAuthenticated, response } from "@/lib/helperFunctions";
 import ReviewModel from "@/models/review.model";
+import '@/models/media.model';
+import '@/models/product.model';
 
 export async function GET(request) {
     try {
