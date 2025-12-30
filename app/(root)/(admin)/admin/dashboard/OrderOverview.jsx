@@ -55,10 +55,11 @@ export function OrderOverview() {
           month,
           amount: monthData ? monthData : 0
         }
-      });
-      setChartData(getChartData);
       console.log('monthData',monthData);
       console.error('monthData', monthData);
+      });
+      setChartData(getChartData);
+
       console.log('monthlySales',monthlySales);
       console.error('monthlySales', monthlySales);
       console.log('monthlySales',getChartData);
