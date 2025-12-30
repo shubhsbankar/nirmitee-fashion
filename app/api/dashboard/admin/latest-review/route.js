@@ -22,6 +22,7 @@ export async function GET(request) {
                     select: 'secure_url'
                 }
             })
+            .lean();
         console.error('latestReviews',latestReviews);
         return response(true, 200, 'Latest reviews.', latestReviews);
 
