@@ -13,7 +13,7 @@ export async function GET(request) {
          console.error('DbConnected');
         const latestReviews = await ReviewModel
             .find({ deletedAt: null })
-            .sort({ createdAT: -1 })
+            .sort({ createdAt: -1 })
             .populate({
                 path: 'product',
                 select: 'name media',
