@@ -7,12 +7,12 @@ import '@/models/product.model';
 export async function GET(request) {
     try {
         const auth = await isAuthenticated('admin');
-        console.error('auth', auth);
+        
         if (!auth.isAuth) {
             return response(false, 403, 'Unauthorised');
         }
         await connectDB();
-         console.error('DbConnected');
+        
         const latestReviews = await ReviewModel
             .find({ deletedAt: null })
             .sort({ createdAt: -1 })
@@ -25,11 +25,10 @@ export async function GET(request) {
                 }
             })
             .lean();
-        console.error('latestReviews',latestReviews);
+        
         return response(true, 200, 'Latest reviews.', latestReviews);
 
     } catch (error) {
-        console.error(error);
         return catchError(error);
     }
 }

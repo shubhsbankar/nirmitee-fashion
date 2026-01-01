@@ -101,6 +101,10 @@ const categorySchema = new Schema(
       default: null,
       index: true,
     },
+    subCategories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Category'
+    }]
   },
   {
     timestamps: true,
