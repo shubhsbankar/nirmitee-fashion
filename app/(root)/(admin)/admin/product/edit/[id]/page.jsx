@@ -1,7 +1,7 @@
 'use client'
-import {  use,useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import { ADMIN_DASHBOARD, ADMIN_PRODUCT_SHOW } from '@/routes/AdminPanelRoute';
-import BreadCrumb  from '@/components/application/admin/BreadCrumb';
+import BreadCrumb from '@/components/application/admin/BreadCrumb';
 import {
   Form,
   FormControl,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
 import { productSchema } from '@/lib/zodSchema'
-import { Card, CardHeader, CardContent} from '@/components/ui/card';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
 import ButtonLoading from '@/components/application/ButtonLoading';
 import { showToast } from '@/lib/showToast';
@@ -26,155 +26,154 @@ import MediaModal from '@/components/application/admin/MediaModal';
 import Image from 'next/image';
 
 const breadcrumbData = [
-   {
-      href:  ADMIN_DASHBOARD,
-      label: 'Home'
-   },
-   {
-      href: ADMIN_PRODUCT_SHOW,
-      label: 'Products'
-   },
-   {
-      href: '',
-      label: 'Edit Product'
-   },
+  {
+    href: ADMIN_DASHBOARD,
+    label: 'Home'
+  },
+  {
+    href: ADMIN_PRODUCT_SHOW,
+    label: 'Products'
+  },
+  {
+    href: '',
+    label: 'Edit Product'
+  },
 ];
 
-const EditProduct = ({ params }) =>{
-    const {id} = use(params);
-  const [ loading, setLoading] = useState(false);
-  const [ categoryOption, setCategoryOption] = useState([]);
+const EditProduct = ({ params }) => {
+  const { id } = use(params);
+  const [loading, setLoading] = useState(false);
+  const [categoryOption, setCategoryOption] = useState([]);
   const [categoryData, setCategoryData] = useState({});
-  const {data : getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
+  const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000&&isSubCategory=true');
 
-  const {data : getProduct, loading: isProductLoading } = useFetch(`/api/product/get/${id}`);
- 
+  const { data: getProduct, loading: isProductLoading } = useFetch(`/api/product/get/${id}`);
+
 
   const [open, setOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState([]);
 
- useEffect(() => {
-     if (getCategory && getCategory.success){
-        const data = getCategory.data;
-        const options = data.map((cat) => ({label: cat.name, value: cat._id}));
-        setCategoryOption(options);
-     }
-  },[getCategory]); 
-  
+  useEffect(() => {
+    if (getCategory && getCategory.success) {
+      const data = getCategory.data;
+      const options = data.map((cat) => ({ label: cat.name, value: cat._id }));
+      setCategoryOption(options);
+    }
+  }, [getCategory]);
 
-  useEffect( () => {
-     const data = getProduct?.data;
-     if (getProduct && getProduct.success){
-        
-        const cat = {label: data?.category?.name,value: data?.category?._id};
-        // setCategoryOption([cat]);
-        setCategoryData(cat);
 
-        form.reset({
-            _id:id,
-                   name: data?.name,
-       slug : data?.slug,
-       category:data?.category?._id,
-       mrp:data?.mrp,
-       sellingPrice: data?.sellingPrice,
-       discountPercentage: data?.discountPercentage,
-       description: data?.description,
-        })
-     }
+  useEffect(() => {
+    const data = getProduct?.data;
+    if (getProduct && getProduct.success) {
 
-     if(data?.media){
-        const media = data.media.map(m => ({id:m._id, url:m.secure_url}))
-        setSelectedMedia(media);
-     }
+      const cat = { label: data?.category?.name, value: data?.category?._id };
+      // setCategoryOption([cat]);
+      setCategoryData(cat);
 
-  },[getProduct]); 
+      form.reset({
+        _id: id,
+        name: data?.name,
+        slug: data?.slug,
+        category: data?.category?._id,
+        mrp: data?.mrp,
+        sellingPrice: data?.sellingPrice,
+        discountPercentage: data?.discountPercentage,
+        description: data?.description,
+      })
+    }
+
+    if (data?.media) {
+      const media = data.media.map(m => ({ id: m._id, url: m.secure_url }))
+      setSelectedMedia(media);
+    }
+
+  }, [getProduct]);
 
   const form = useForm({
-        resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema),
     defaultValues: {
-        _id: id,
-       name: "",
-       slug : "",
-       category:"",
-       mrp:0,
-       sellingPrice: 0,
-       discountPercentage: 0,
-       description: "",
+      _id: id,
+      name: "",
+      slug: "",
+      category: "",
+      mrp: 0,
+      sellingPrice: 0,
+      discountPercentage: 0,
+      description: "",
     },
   });
 
   useEffect(() => {
-     const name = form.getValues('name');
-     if(name) {
-        form.setValue('slug', slugify(name).toLowerCase())
-     }
+    const name = form.getValues('name');
+    if (name) {
+      form.setValue('slug', slugify(name).toLowerCase())
+    }
   }, [form.watch('name')]);
 
   useEffect(() => {
     const mrp = Number(form.getValues("mrp")) || 0;
     const sellingPrice = Number(form.getValues("sellingPrice")) || 0;
-    
+
     if (mrp > 0 && sellingPrice > 0) {
       const val = ((mrp - sellingPrice) / mrp) * 100;
       form.setValue("discountPercentage", Math.round(val));
     }
-    
-    
- }, [form.watch('mrp'),form.watch('sellingPrice')]);
+
+
+  }, [form.watch('mrp'), form.watch('sellingPrice')]);
 
   const editor = (event, editor) => {
-  const data = editor.getData();
-  form.setValue('description',data); 
+    const data = editor.getData();
+    form.setValue('description', data);
   }
 
   const onSubmit = async (values) => {
-   
+
     setLoading(true);
     try {
-    if (selectedMedia.length <= 0 )
-    {
-      return showToast('error','Please select media.');
+      if (selectedMedia.length <= 0) {
+        return showToast('error', 'Please select media.');
+      }
+      values.media = selectedMedia.map(m => m.id);
+
+      values.category = categoryData.value;
+      //lues._id = id;
+      const { data: response } = await axios.put('/api/product/update', values);
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      showToast('success', response.message);
     }
-    values.media = selectedMedia.map(m => m.id);
-    
-    values.category = categoryData.value;
-    //lues._id = id;
-        const {data : response } = await axios.put('/api/product/update',values);
-        if ( !response.success ){
-            throw new Error(response.message);
-        }
-       
-        showToast('success',response.message);
-        }
     catch (error) {
-       
-        showToast('error',error.message);
+
+      showToast('error', error.message);
     }
-    finally{
-        setLoading(false);
-        }
+    finally {
+      setLoading(false);
+    }
   }
 
-  
 
-    return (
-        <div>
-           <BreadCrumb breadcrumbData={breadcrumbData} />
-         <Card className='py-0 rounded shadow-sm'>
-                <CardHeader className='pt-3 px-3 border-b [.border-b]:pb-2'>
-                 <h4 className='font-semibold text-xl'>Edit Product</h4>        
-                </CardHeader>
-                <CardContent className='pb-5'>
-                   <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} >
-                      <div className='grid md:grid-cols-2 grid-cols-1  gap-5'>
-             <div className=''>
+
+  return (
+    <div>
+      <BreadCrumb breadcrumbData={breadcrumbData} />
+      <Card className='py-0 rounded shadow-sm'>
+        <CardHeader className='pt-3 px-3 border-b [.border-b]:pb-2'>
+          <h4 className='font-semibold text-xl'>Edit Product</h4>
+        </CardHeader>
+        <CardContent className='pb-5'>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} >
+              <div className='grid md:grid-cols-2 grid-cols-1  gap-5'>
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                         <FormLabel>Name<span className='text-red-500'>*</span></FormLabel>
+                        <FormLabel>Name<span className='text-red-500'>*</span></FormLabel>
                         <FormControl>
                           <Input type="text" placeholder="Enter product name" {...field} />
                         </FormControl>
@@ -182,8 +181,8 @@ const EditProduct = ({ params }) =>{
                       </FormItem>
                     )}
                   />
-            </div>
-             <div className=''>
+                </div>
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="slug"
@@ -197,29 +196,29 @@ const EditProduct = ({ params }) =>{
                       </FormItem>
                     )}
                   />
-            </div>
-             <div className=''>
+                </div>
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="category"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category<span className='text-red-500'>*</span></FormLabel>
-                          <FormControl>
-                           <Select
-                              options={categoryOption}
-                              selected={field.value}
-                              setSelected={field.onChange}
-                              isMulti={false}
-                           />
+                        <FormControl>
+                          <Select
+                            options={categoryOption}
+                            selected={field.value}
+                            setSelected={field.onChange}
+                            isMulti={false}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-            </div>
+                </div>
 
-            <div className=''>
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="mrp"
@@ -233,9 +232,9 @@ const EditProduct = ({ params }) =>{
                       </FormItem>
                     )}
                   />
-            </div>
-              
-            <div className=''>
+                </div>
+
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="sellingPrice"
@@ -249,9 +248,9 @@ const EditProduct = ({ params }) =>{
                       </FormItem>
                     )}
                   />
-               </div>
+                </div>
 
-            <div className=''>
+                <div className=''>
                   <FormField
                     control={form.control}
                     name="discountPercentage"
@@ -265,26 +264,26 @@ const EditProduct = ({ params }) =>{
                       </FormItem>
                     )}
                   />
-               </div>
-            <div className='mb-5 md:col-span-2'>
-               <FormLabel className='mb-2'>Description<span className='text-red-500'>*</span></FormLabel>
-               {
-                !isProductLoading && <Editor onChange={editor} initialData={form.getValues('description')}/>
-               }
-                        
-                        <FormMessage />
-               </div>
-               </div>
-                <div className='md:col-span-2 border border rounded p-5 text-center'>
+                </div>
+                <div className='mb-5 md:col-span-2'>
+                  <FormLabel className='mb-2'>Description<span className='text-red-500'>*</span></FormLabel>
+                  {
+                    !isProductLoading && <Editor onChange={editor} initialData={form.getValues('description')} />
+                  }
+
+                  <FormMessage />
+                </div>
+              </div>
+              <div className='md:col-span-2 border border rounded p-5 text-center'>
                 <MediaModal open={open} setOpen={setOpen} selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia}
-                isMultiple={true} />
+                  isMultiple={true} />
                 {
                   selectedMedia.length > 0 &&
-                    <div className='flex justify-center items-center flex-wrap mb-3 gap-2'>
+                  <div className='flex justify-center items-center flex-wrap mb-3 gap-2'>
                     {
                       selectedMedia.map(m => (
                         <div key={m.id} className='h-24 w-24 border'>
-                          <Image 
+                          <Image
                             src={m.url}
                             height={100}
                             width={100}
@@ -294,24 +293,24 @@ const EditProduct = ({ params }) =>{
                         </div>
                       ))
                     }
-                    </div>
+                  </div>
                 }
-                <div onClick={() => {setOpen(true)}} className='bg-gray-50 dark:bg-card border w-[200px] mx-auto
+                <div onClick={() => { setOpen(true) }} className='bg-gray-50 dark:bg-card border w-[200px] mx-auto
                   p-5 cursor-pointer'>
                   <span className='semi-bold'>Select Media</span>
                 </div>
               </div>
-               
-               <div className='mt-5'>
-                 <ButtonLoading type="submit" text="Save Changes" loading={loading} className={" cursor-pointer"}/>
-               </div>
-            </form>
-            </Form>
 
-                </CardContent>
-            </Card>
-        </div>
-    );
+              <div className='mt-5'>
+                <ButtonLoading type="submit" text="Save Changes" loading={loading} className={" cursor-pointer"} />
+              </div>
+            </form>
+          </Form>
+
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 export default EditProduct;

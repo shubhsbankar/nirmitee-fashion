@@ -206,7 +206,7 @@ export const emailVerificationLink = (link) => {
                                                                     style="color:#393d47;font-family:Tahoma,Verdana,Segoe,sans-serif;font-size:13px;line-height:150%;text-align:center;mso-line-height-alt:19.5px;">
                                                                     <p style="margin: 10px;"><strong>Note:</strong> This link will expire in 1 hours. If you did not create an account, you can safely ignore this email.</p>
                                                                          
-                                                                    <p style="margin: 0;">© 2025 Nirmitee Fashion. All rights reserved.
+                                                                    <p style="margin: 0;">© ${new Date().getFullYear()} Nirmitee Fashion. All rights reserved.
                                                                     </p>
                                                                 </div>
                                                             </td>

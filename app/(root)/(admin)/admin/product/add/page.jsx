@@ -44,7 +44,7 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [categoryOption, setCategoryOption] = useState([]);
   const [editorInstance, setEditorInstance] = useState(null);
-  const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000');
+  const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000&&isSubCategory=true');
   
 
   const [open, setOpen] = useState(false);

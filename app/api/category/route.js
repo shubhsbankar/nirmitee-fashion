@@ -20,8 +20,9 @@ export async function GET(request) {
          const filters = JSON.parse(searchParams.get('filters') || "[]"); 
          const globalFilter = searchParams.get('globalFilters') || ''; 
          const sorting = JSON.parse(searchParams.get('sorting') || "[]"); 
-         const deleteType = searchParams.get('deleteType');
-         
+        const deleteType = searchParams.get('deleteType');
+        const isSubcategory = searchParams.get('isSubCategory') || false;
+         console.log('isSubcategory',isSubcategory)
          let matchQuery = {};
 
          if (deleteType === 'SD'){
@@ -56,6 +57,7 @@ export async function GET(request) {
                      _id: 1,
                      name: 1,
                      slug: 1,
+                     subCategories: 1,
                      createdAt: 1,
                      updatedAt: 1,
                      deletedAt: 1
@@ -73,7 +75,7 @@ export async function GET(request) {
 
         return NextResponse.json({
             success:true,
-            data: getCategory,
+            data: !isSubcategory ? getCategory : getCategory.filter(cat => cat.subCategories.length === 0),
             meta: { totalRowCount }
         });
 
