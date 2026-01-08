@@ -122,18 +122,6 @@ const Header = () => {
     "/api/category?deleteType=SD&size=10000&isCategory=true"
   );
 
-  console.log('allCategories', allCategories)
-
-  // useEffect(() => {
-  //   const fetchSubCategories = async () => {
-  //     const { data: allCategories } = await axios.get(
-  //       `/api/category/get-subcategories?category=${category}`
-  //     );
-  //     console.log('allCategories', allCategories);
-  //   }
-  //   //fetchSubCategories();
-  // }, [category])
-
   return (
     <div className='bg-white border-b lg:px-32 px-4'>
       <div className='flex items-center justify-between lg:py-2 py-3'>
