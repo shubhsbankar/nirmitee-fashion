@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import logo from '@/public/assets/images/dark-logo.png';
+import logo from '@/public/assets/images/nf_logo.png'
 import Link from 'next/link';
 import { USER_DASHBOARD, WEBSITE_HOME, WEBSITE_LOGIN, WEBSITE_REGISTER, WEBSITE_SHOP } from '@/routes/WebsiteRoute';
 import { IoLocationOutline } from 'react-icons/io5';
