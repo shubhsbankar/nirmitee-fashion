@@ -137,10 +137,10 @@ import { NextResponse } from 'next/server';
 export async function GET(request) {
   try {
     // ---------------- AUTH ----------------
-    const auth = await isAuthenticated('admin');
-    if (!auth.isAuth) {
-      return response(false, 403, 'Unauthorised');
-    }
+    // const auth = await isAuthenticated('admin');
+    // if (!auth.isAuth) {
+    //   return response(false, 403, 'Unauthorised');
+    // }
 
     await connectDB();
 
