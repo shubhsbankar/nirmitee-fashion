@@ -95,7 +95,7 @@ const AddProduct = () => {
   }
 
   const onSubmit = async (values) => {
-    
+    console.log('Testing values', values);
     setLoading(true);
     try {
       if (selectedMedia.length <= 0) {
