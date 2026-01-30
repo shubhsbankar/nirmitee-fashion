@@ -269,11 +269,11 @@ export async function GET(request) {
       },
 
       // Remove products without valid variants
-      {
-        $match: {
-          variants: { $ne: [] },
-        },
-      },
+      // {
+      //   $match: {
+      //     variants: { $ne: [] },
+      //   },
+      // },
 
       // --------- MEDIA LOOKUP ----------
       {
