@@ -3,9 +3,47 @@ import { jwtVerify } from 'jose';
 import { ADMIN_DASHBOARD } from '@/routes/AdminPanelRoute';
 import { USER_DASHBOARD,WEBSITE_LOGIN } from '@/routes/WebsiteRoute';
 
+function applyCors(request, res) {
+  const origin = request.headers.get('origin');
+  if (!origin) return res;
+
+  const allowed = (process.env.CORS_ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  // If not configured, default to allowing same-origin only (i.e. do nothing).
+  if (!allowed.length) return res;
+
+  if (allowed.includes(origin)) {
+    res.headers.set('Access-Control-Allow-Origin', origin);
+    res.headers.set('Access-Control-Allow-Credentials', 'true');
+    res.headers.set('Vary', 'Origin');
+    res.headers.set('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+
+    const reqHeaders = request.headers.get('access-control-request-headers');
+    res.headers.set(
+      'Access-Control-Allow-Headers',
+      reqHeaders || 'Content-Type, Authorization, X-Requested-With'
+    );
+    res.headers.set('Access-Control-Max-Age', '86400');
+  }
+
+  return res;
+}
+
 export async function middleware(request) {
   try {
       const pathname = request.nextUrl.pathname;
+
+      // CORS for API routes (must happen before any redirects).
+      if (pathname.startsWith('/api/')) {
+        if (request.method === 'OPTIONS') {
+          return applyCors(request, new NextResponse(null, { status: 204 }));
+        }
+        return applyCors(request, NextResponse.next());
+      }
+
       const hasToken = request.cookies.has('access_token');
       if (!hasToken){
           if (!pathname.startsWith('/auth')){
@@ -37,5 +75,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-    matcher: ['/admin/:path*','/my-account/:path*','/auth/:path*']
+    matcher: ['/api/:path*','/admin/:path*','/my-account/:path*','/auth/:path*']
 }
