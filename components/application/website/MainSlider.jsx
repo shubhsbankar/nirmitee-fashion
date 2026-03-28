@@ -10,9 +10,6 @@ import slider4 from '@/public/assets/images/Desktop_from_Priyanka_1.webp'
 import Image from 'next/image';
 import { LuChevronRight, LuChevronLeft } from 'react-icons/lu';
 
-const SLIDER5_SRC = '/assets/images/Slider5.jpeg'
-const SLIDER6_SRC = '/assets/images/Slider6.jpeg'
-
 const ArrowNext = (props) => {
   const { onClick } = props;
 
@@ -73,24 +70,6 @@ const MainSlider = () => {
         </div>
         <div>
           <Image src={slider4.src} width={slider4.width} height={slider4.height} alt='slider4' className='w-full h-full'/>
-        </div>
-        <div>
-          <Image
-            src={SLIDER5_SRC}
-            width={slider1.width}
-            height={slider1.height}
-            alt="Slider 5"
-            className="w-full h-full"
-          />
-        </div>
-        <div>
-          <Image
-            src={SLIDER6_SRC}
-            width={slider1.width}
-            height={slider1.height}
-            alt="Slider 6"
-            className="w-full h-full"
-          />
         </div>
       </Slider>
     </div>
