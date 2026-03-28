@@ -1,44 +1,21 @@
-import ProductDetails from './ProductDetails';
-import { getProductDetailsBySlug } from '@/lib/getProductDetails';
+import { Suspense } from 'react'
+import ProductPageClient from './ProductPageClient'
 
-const ProductPage = async ({ params, searchParams }) => {
-  const { slug: rawSlug } = await params;
-  const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
-  const sp = await searchParams;
-  const size =
-    typeof sp?.size === 'string'
-      ? sp.size
-      : Array.isArray(sp?.size)
-        ? sp.size[0]
-        : undefined;
-  const color =
-    typeof sp?.color === 'string'
-      ? sp.color
-      : Array.isArray(sp?.color)
-        ? sp.color[0]
-        : undefined;
-
-  const result = await getProductDetailsBySlug({ slug, size, color });
-
-  if (!result.ok) {
-    return (
-      <div className="flex justify-center items-center py-10 h-[300px]">
-        <h1 className="text-4xl font-semibold">Data not found.</h1>
-      </div>
-    );
-  }
-
-  const d = result.data;
-
+/**
+ * Product data is loaded in the browser via fetch(`/api/product/details/...`) so that:
+ * - DevTools → Network shows the API call (RSC-only DB access does not appear as XHR/fetch).
+ * - Same-origin `/api` always matches the site you are testing (no NEXT_PUBLIC_API_BASE_URL mismatch).
+ */
+export default function ProductPage() {
   return (
-    <ProductDetails
-      product={d.products}
-      variant={d.variant}
-      colors={d.colors}
-      sizes={d.sizes}
-      reviewCount={d.reviewCount}
-    />
-  );
-};
-
-export default ProductPage;
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center py-20 min-h-[280px]">
+          <p className="text-lg text-muted-foreground">Loading…</p>
+        </div>
+      }
+    >
+      <ProductPageClient />
+    </Suspense>
+  )
+}
