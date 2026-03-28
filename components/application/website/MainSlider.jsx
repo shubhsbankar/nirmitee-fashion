@@ -8,10 +8,10 @@ import slider2 from '@/public/assets/images/slider2.webp'
 import slider3 from '@/public/assets/images/slider3.webp'
 import slider4 from '@/public/assets/images/Desktop_from_Priyanka_1.webp'
 import Image from 'next/image';
-
-const SLIDER5_SRC = '/assets/images/Slider5.jpg'
-const SLIDER6_SRC = '/assets/images/Slider6.jpg'
 import { LuChevronRight, LuChevronLeft } from 'react-icons/lu';
+
+const SLIDER5_SRC = '/assets/images/Slider5.jpeg'
+const SLIDER6_SRC = '/assets/images/Slider6.jpeg'
 
 const ArrowNext = (props) => {
   const { onClick } = props;
