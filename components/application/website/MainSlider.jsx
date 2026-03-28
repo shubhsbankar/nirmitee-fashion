@@ -8,6 +8,9 @@ import slider2 from '@/public/assets/images/slider2.webp'
 import slider3 from '@/public/assets/images/slider3.webp'
 import slider4 from '@/public/assets/images/Desktop_from_Priyanka_1.webp'
 import Image from 'next/image';
+
+const SLIDER5_SRC = '/assets/images/Slider5.jpg'
+const SLIDER6_SRC = '/assets/images/Slider6.jpg'
 import { LuChevronRight, LuChevronLeft } from 'react-icons/lu';
 
 const ArrowNext = (props) => {
@@ -70,6 +73,28 @@ const MainSlider = () => {
         </div>
         <div>
           <Image src={slider4.src} width={slider4.width} height={slider4.height} alt='slider4' className='w-full h-full'/>
+        </div>
+        <div>
+          <Image
+            src={SLIDER5_SRC}
+            width={1920}
+            height={720}
+            alt="Slider 5"
+            className="w-full h-full object-cover"
+            sizes="100vw"
+            priority={false}
+          />
+        </div>
+        <div>
+          <Image
+            src={SLIDER6_SRC}
+            width={1920}
+            height={720}
+            alt="Slider 6"
+            className="w-full h-full object-cover"
+            sizes="100vw"
+            priority={false}
+          />
         </div>
       </Slider>
     </div>
