@@ -4,6 +4,7 @@ import Link from 'next/link'
 import banner1 from '@/public/assets/images/banner1.png';
 import banner2 from '@/public/assets/images/banner2.png';
 import FeaturedProducts from '@/components/application/website/FeaturedProducts';
+import ShopByCategorySection from '@/components/application/website/ShopByCategorySection';
 import advertisingBanner from '@/public/assets/images/advertising-banner.png'
 import Testimonial from '@/components/application/website/Testimonial';
 import { GiReturnArrow } from 'react-icons/gi';
@@ -46,6 +47,7 @@ const Home = () => {
 
       </section>
       <FeaturedProducts />
+      <ShopByCategorySection />
       <section className='sm:pt-20 pt-5 pb-10'>
         <Image
           src={advertisingBanner.src}
