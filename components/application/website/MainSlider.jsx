@@ -77,23 +77,19 @@ const MainSlider = () => {
         <div>
           <Image
             src={SLIDER5_SRC}
-            width={1920}
-            height={720}
+            width={slider1.width}
+            height={slider1.height}
             alt="Slider 5"
-            className="w-full h-full object-cover"
-            sizes="100vw"
-            priority={false}
+            className="w-full h-full"
           />
         </div>
         <div>
           <Image
             src={SLIDER6_SRC}
-            width={1920}
-            height={720}
+            width={slider1.width}
+            height={slider1.height}
             alt="Slider 6"
-            className="w-full h-full object-cover"
-            sizes="100vw"
-            priority={false}
+            className="w-full h-full"
           />
         </div>
       </Slider>
