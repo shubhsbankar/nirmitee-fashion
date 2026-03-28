@@ -1,5 +1,5 @@
 import { response, catchError } from '@/lib/helperFunctions';
-import { getProductDetailsBySlug } from '@/lib/getProductDetails';
+import { getProductDetailsBySlug } from '../../../../../lib/getProductDetails';
 
 export async function GET(request, { params }) {
   try {
