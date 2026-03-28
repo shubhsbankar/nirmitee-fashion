@@ -14,11 +14,11 @@ export async function GET(request, { params }) {
         await connectDB();
 
         const getParams = await params;
-        console.log('getParams : ', getParams);
         if (!getParams) {
             return response(false, 400, 'Missing params');
         }
-        const slug = getParams.slug;
+        const rawSlug = getParams.slug;
+        const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
         const searchParams = request.nextUrl.searchParams;
         const size = searchParams.get('size');
         const color = searchParams.get('color');
@@ -31,40 +31,72 @@ export async function GET(request, { params }) {
         if (!slug) {
             return response(false, 400, 'Missing input field');
         }
-        filter.slug = slug;
+        // Product slugs are stored lowercase; URLs may not match casing.
+        filter.slug = String(slug).trim().toLowerCase();
 
         const data = await ProductModel
             .findOne(filter)
-            .populate('media', 'secure_url')
+            .populate('media')
             .lean();
         if (!data) {
             return response(false, 404, 'Product not found.');
         }
-        console.log('******************', data);
 
-        let variantFilter = {
-            product: data._id
+        const variantBase = { product: data._id, deletedAt: null };
+
+        let variant = null;
+
+        if (size && color) {
+            variant = await ProductVariantModel.findOne({
+                ...variantBase,
+                size,
+                color,
+            })
+                .populate('media')
+                .lean();
+        } else if (size) {
+            variant = await ProductVariantModel.findOne({
+                ...variantBase,
+                size,
+            })
+                .populate('media')
+                .lean();
+        } else if (color) {
+            variant = await ProductVariantModel.findOne({
+                ...variantBase,
+                color,
+            })
+                .populate('media')
+                .lean();
         }
 
-        if (size) {
-            variantFilter.size = size;
+        if (!variant) {
+            variant = await ProductVariantModel.findOne(variantBase)
+                .sort({ _id: 1 })
+                .populate('media')
+                .lean();
         }
-        if (color) {
-            variantFilter.color = color;
+
+        if (!variant) {
+            variant = await ProductVariantModel.findOne({ product: data._id })
+                .sort({ _id: 1 })
+                .populate('media')
+                .lean();
         }
-        const variant = await ProductVariantModel
-            .findOne(variantFilter)
-            .populate('media', 'secure_url')
-            .lean();
+
         if (!variant) {
             return response(false, 404, 'Product not found.');
         }
-        const getColor = await ProductVariantModel.distinct('color', { product: data._id });
+        const getColor = await ProductVariantModel.distinct('color', {
+            product: data._id,
+            deletedAt: null,
+        });
         const getSize = await ProductVariantModel
             .aggregate([
                 {
                     $match: {
-                        product: data._id
+                        product: data._id,
+                        deletedAt: null,
                     }
                 },
                 {
@@ -112,7 +144,6 @@ export async function GET(request, { params }) {
             sizes: getSize.length ? getSize.map(item => item.size) : [],
             reviewCount: review
         }
-        console.log(productData);
         return response(true, 200, "Product found.", productData);
 
     }
