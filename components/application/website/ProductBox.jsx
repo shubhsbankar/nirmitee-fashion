@@ -8,11 +8,10 @@ import {set} from '@/store/reducer/selecetedMediaReducer';
 
 
 const ProductBox = ({ product }) => {
-    console.log(product);
     const dispatch = useDispatch();
   return (
       <div className='rounded-lg hover:shadow-lg border overflow-hidden' onClick={() => dispatch(set(product?.media[0]?.secure_url))}>
-          <Link href={WEBSITE_PRODUCT_DETAILS(product.slug)}>
+          <Link href={WEBSITE_PRODUCT_DETAILS(product.slug)} prefetch={false}>
           <Image
               src={product?.media[0]?.secure_url || imgPlaceholder.src}
               width={400}
