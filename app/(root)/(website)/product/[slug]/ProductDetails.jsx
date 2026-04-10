@@ -40,13 +40,13 @@ const ProductDetails = ({ product, variant, colors, sizes, reviewCount }) => {
     setActiveThumb(selectedImage)
   }, [variant]);
   useEffect(() => {
-    if (cartStore.count > 0) {
-      const existingProduct = cartStore.products.findIndex(cartProduct => cartProduct.productId === product._id && cartProduct.variantId === variant._id);
-      if (existingProduct >= 0) {
-        setIsAddedIntoCart(true);
-      } else {
-        setIsAddedIntoCart(false);
-      }
+    if (cartStore.count > 0 && product?._id && variant?._id) {
+      const existingProduct = cartStore.products.findIndex(
+        cartProduct => cartProduct.productId === product._id && cartProduct.variantId === variant._id
+      );
+      setIsAddedIntoCart(existingProduct >= 0);
+    } else {
+      setIsAddedIntoCart(false);
     }
     setIsProductLoading(false)
 
@@ -66,6 +66,10 @@ const ProductDetails = ({ product, variant, colors, sizes, reviewCount }) => {
     }
   }
   const handleAddToCart = () => {
+    if (!variant?._id) {
+      showToast('error', 'This product variant is unavailable.');
+      return;
+    }
     const cartProduct = {
       productId: product._id,
       variantId: variant._id,
@@ -145,6 +149,13 @@ const ProductDetails = ({ product, variant, colors, sizes, reviewCount }) => {
         </div>
         <div className='md:w-1/2 md:mt-0 mt-5'>
           <h1 className='text-3xl font-semibold mb-2'>{product?.name}</h1>
+          {
+            !variant?._id && (
+              <div className='mb-4 rounded border bg-yellow-50 text-yellow-900 px-4 py-3'>
+                This product is available, but a purchasable variant (size/color) was not found.
+              </div>
+            )
+          }
           <div className='flex items-center gap-1 mb-5'>
             {
               Array.from({ length: 5 }).map((_, i) => (
@@ -154,47 +165,64 @@ const ProductDetails = ({ product, variant, colors, sizes, reviewCount }) => {
             <span className='text-sm ps-2'>({reviewCount} Reviews)</span>
           </div>
           <div className='flex items-center gap-2 mb-3'>
-            <span className='text-xl font-semibold'>{variant.sellingPrice.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
-            <span className='text-sm line-through text-gray-500'>{variant.mrp.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
-            <span className='bg-red-500 rounded-2xl px-3 py-1 text-white text-xs ms-5'>-{variant.discountPercentage}%</span>
+            <span className='text-xl font-semibold'>
+              {(variant?.sellingPrice ?? product?.sellingPrice)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}
+            </span>
+            <span className='text-sm line-through text-gray-500'>
+              {(variant?.mrp ?? product?.mrp)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}
+            </span>
+            {
+              (variant?.discountPercentage ?? product?.discountPercentage) !== undefined && (
+                <span className='bg-red-500 rounded-2xl px-3 py-1 text-white text-xs ms-5'>
+                  -{(variant?.discountPercentage ?? product?.discountPercentage)}%
+                </span>
+              )
+            }
           </div>
           <div className='line-clamp-3' dangerouslySetInnerHTML={{ __html: decode(product.description) }}>
 
           </div>
-          <div className='mt-5'>
-            <p className='mb-2'>
-              <span className='font-semibold'>Color: </span>{variant?.color}
-            </p>
-            <div className='flex gap-5 '>
-              {
-                colors.map(color => (
-                  <Link onClick={ () => setIsProductLoading(true)}  href={`${WEBSITE_PRODUCT_DETAILS(product.slug)}?color=${color}&size=${variant.size}`}
-                    key={color}
-                    className={`border py-1 px-3 rounded-lg cursor-pointer hover:bg-primary hover:text-white 
-                    ${color === variant?.color ? 'bg-primary text-white' : ''}`}
-                  >{color}</Link>
-                ))
-              }
+          {
+            !!variant?._id && (
+              <>
+                <div className='mt-5'>
+                  <p className='mb-2'>
+                    <span className='font-semibold'>Color: </span>{variant?.color}
+                  </p>
+                  <div className='flex gap-5 '>
+                    {
+                      colors.map(color => (
+                        <Link onClick={ () => setIsProductLoading(true)}  href={`${WEBSITE_PRODUCT_DETAILS(product.slug)}?color=${color}&size=${variant.size}`}
+                          key={color}
+                          className={`border py-1 px-3 rounded-lg cursor-pointer hover:bg-primary hover:text-white 
+                          ${color === variant?.color ? 'bg-primary text-white' : ''}`}
+                        >{color}</Link>
+                      ))
+                    }
 
-            </div>
-          </div>
+                  </div>
+                </div>
 
-          <div className='mt-5'>
-            <p className='mb-2'>
-              <span className='font-semibold'>Size: </span>{variant?.size}
-            </p>
-            <div className='flex gap-5 '>
-              {
-                sizes.map(size => (
-                  <Link onClick={ () => setIsProductLoading(true)} href={`${WEBSITE_PRODUCT_DETAILS(product.slug)}?color=${variant.color}&size=${size}`}
-                    key={size}
-                    className={`border py-1 px-3 rounded-lg cursor-pointer hover:bg-primary hover:text-white 
-                    ${size === variant?.size ? 'bg-primary text-white' : ''}`}
-                  >{size}</Link>
-                ))
-              }
+                <div className='mt-5'>
+                  <p className='mb-2'>
+                    <span className='font-semibold'>Size: </span>{variant?.size}
+                  </p>
+                  <div className='flex gap-5 '>
+                    {
+                      sizes.map(size => (
+                        <Link onClick={ () => setIsProductLoading(true)} href={`${WEBSITE_PRODUCT_DETAILS(product.slug)}?color=${variant.color}&size=${size}`}
+                          key={size}
+                          className={`border py-1 px-3 rounded-lg cursor-pointer hover:bg-primary hover:text-white 
+                          ${size === variant?.size ? 'bg-primary text-white' : ''}`}
+                        >{size}</Link>
+                      ))
+                    }
 
-            </div>
+                  </div>
+                </div>
+              </>
+            )
+          }
             <div className='mt-5'>
               <p className='font-bold mb-2'>Quantity</p>
               <div className='flex items-center h-10 border w-fit rounded-full'>
@@ -207,11 +235,16 @@ const ProductDetails = ({ product, variant, colors, sizes, reviewCount }) => {
                 </button>
               </div>
             </div>
-          </div>
           <div className='mt-5'>
             {
               !isAddedIntoCart ? 
-            <ButtonLoading type={'button'} text={'Add To Cart'} className={'w-full rounded-full py-6 text-md cursor-pointer'} onClick={handleAddToCart} />
+            <ButtonLoading
+              type={'button'}
+              text={variant?._id ? 'Add To Cart' : 'Variant unavailable'}
+              className={'w-full rounded-full py-6 text-md cursor-pointer'}
+              onClick={handleAddToCart}
+              disabled={!variant?._id}
+            />
                 :
                 <Button className={'w-full rounded-full py-6 text-md cursor-pointer'} type='button' asChild>
                   <Link href={WEBSITE_CART}>Go To Cart</Link>
