@@ -13,8 +13,10 @@ export async function GET(request, { params }) {
     const size = searchParams.get('size');
     const color = searchParams.get('color');
 
-    const result = await getProductDetailsBySlug({ slug, size, color });
+    console.log('slug', slug);
 
+    const result = await getProductDetailsBySlug({ slug, size, color });
+    console.log('result', result);
     if (!result.ok) {
       return response(false, result.status, result.message);
     }
