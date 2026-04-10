@@ -66,7 +66,7 @@ export default function ProductPageClient() {
   if (state.loading) {
     return (
       <div className="flex justify-center items-center py-20 min-h-[280px]">
-        <p className="text-lg text-muted-foreground">Loading Shubham…</p>
+        <p className="text-lg text-muted-foreground">Loading...</p>
       </div>
     )
   }
@@ -74,7 +74,7 @@ export default function ProductPageClient() {
   if (!state.data) {
     return (
       <div className="flex flex-col justify-center items-center py-10 min-h-[300px] px-4 text-center gap-3">
-        <h1 className="text-2xl sm:text-4xl font-semibold">Data not found Shubham.</h1>
+        <h1 className="text-2xl sm:text-4xl font-semibold">Data not found.</h1>
         {state.errorMessage ? (
           <p className="text-sm text-muted-foreground max-w-md">{state.errorMessage}</p>
         ) : null}
